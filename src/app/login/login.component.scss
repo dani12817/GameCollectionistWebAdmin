@@ -1,0 +1,42 @@
+.bodyLoginContainer {
+    width: 100vw;
+    height: 100vh;
+    background-image: url('/assets/img/background-login.jpg');
+    background-size: cover;
+
+    .loginContainer {
+        background-color: whitesmoke;
+
+        .logoImage {
+            width: 100%;
+        }
+
+        .emailLoginContainer {
+            margin-bottom: 24px;
+        }
+
+        .SNLoginContainer img {
+            cursor: pointer;
+        }
+
+        .registerContainer {
+            text-align: center;
+        }
+    }
+}
+
+@media screen and (min-width: 600px) {
+    .loginContainer {
+        width: 320px;
+        border-radius: 24px;
+        padding: 24px;
+    }
+}
+
+@media screen and (max-width: 599px) {
+    .loginContainer {
+        width: 100vw;
+        height: calc(100vh - 32px);
+        padding: 16px;
+    }
+}

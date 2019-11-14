@@ -1,0 +1,137 @@
+.gameDetailsContainer {
+    max-width: 896px;
+    margin: 0 auto;
+
+    .gameBoxartContainer {
+        position: relative;
+
+        .gameEditButton {
+            left: 0;
+            top: 0;
+            position: absolute;
+        }
+
+        .gameAddButton {
+            right: 0;
+            top: 0;
+            position: absolute;
+        }
+    }
+
+    .gameDataContianer {
+        margin-bottom: auto;
+        
+        .gameDataSection:not(:last-child) {
+            margin-bottom: 16px;
+        }
+
+        .gameDataSectionTitle {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .gameDataName {
+            font-weight: 600;
+            font-size: 24px;
+
+            span {
+                font-style: italic;
+            }
+        }
+
+        .gameDataGenresContainer {
+            padding: 0 16px;
+
+            .gameDataSectionTitle {
+                margin-left: -16px;
+            }
+
+            mat-chip-list {
+                mat-chip {
+                    font-weight: 600;
+                    cursor: pointer;
+                }
+            }
+        }
+
+        .slashDivider {
+            font-size: 38px;
+            line-height: 26px;
+            margin-left: 16px !important;
+        }
+
+        .gameDataPlatform, .gameDataRegion {
+            img:not(:first-child){
+                cursor: pointer;
+            }
+        }
+
+        .gameDataPlatform {
+            .gameDataPlatforms * {
+                margin: 8px 0;
+            }
+
+            img {
+                width: 96px;
+            }
+        }
+
+        .gameDataRegion {
+            img {
+                width: 48px;
+                margin-left: 16px;
+            }
+        }
+    }
+}
+
+@media screen and (min-width: 769px) {
+    .gameDetailsContainer {
+        padding: 24px;
+
+        .gameBoxart {
+            max-width: 256px;
+            min-width: 256px;
+        }
+    
+        .gameDataContianer {
+            margin-left: 36px;
+
+            .gameDataPlatform {    
+                img {
+                    margin-left: 16px !important;
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .gameDetailsContainer {
+        padding: 24px;
+        flex-direction: column !important;
+
+        .gameBoxart {
+            width: calc(100vw - 32px);
+            max-width: 320px;
+        }
+    
+        .gameDataContianer {
+            width: 100%;
+            margin-top: 16px;
+        }
+
+        .gameDataPlatform {
+            .gameDataPlatforms {
+                place-content: center space-evenly !important;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 568px) {
+    .gameDetailsContainer {
+        padding: 12px;
+    }
+}

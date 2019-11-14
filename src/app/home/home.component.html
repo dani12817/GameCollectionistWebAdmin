@@ -1,38 +1,26 @@
-<!-- <div class="card-columns">
-    <div class="card">
-        <img src="assets/image/no_image.jpg" class="card-img-top" alt="...">
-        <div class="card-body">
-            <h5 class="card-title">Card title that wraps to a new line</h5>
-            <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-        </div>
-    </div>
-</div> -->
 <mat-sidenav-container>
-  <mat-sidenav #sidenav mode="over" position="start" fxLayout="column" class="sidenavMenu">
-    <div></div>
-  </mat-sidenav>
+    <mat-sidenav #sidenav mode="over" position="start" fxLayout="column" class="sidenavMenu">
+        <app-sidenav [snav]="sidenav"></app-sidenav>
+    </mat-sidenav>
 
-  <mat-sidenav-content id="wrapper">
-      <mat-toolbar color="primary" class="mat-elevation-z1 toolbarComputer" fxHide.lt-md>
-          <mat-toolbar-row>
-              <button mat-icon-button class="menu-button" (click)="sidenav.open()"><mat-icon>menu</mat-icon></button>
+    <mat-sidenav-content id="wrapper">
+        <mat-toolbar color="primary" class="mat-elevation-z1">
+            <mat-toolbar-row>
+                <button mat-icon-button class="menu-button" (click)="sidenav.open()" *ngIf="authUser"><mat-icon>menu</mat-icon></button>
 
-              <span class="toolbar-separator"></span>
+                <span class="toolbar-separator"></span>
 
-              <img src="/assets/img/logo.png" srcset="/assets/img/logo.png" style="height: 40px">
+                <img src="/assets/img/logo.png" srcset="/assets/img/logo.png" class="appLogo" [routerLink]="['/']">
 
-              <span class="toolbar-separator"></span>
+                <span class="toolbar-separator"></span>
 
-              <button mat-icon-button matTooltip="Iniciar sesión">
-                  <mat-icon matBadgeColor="primary">supervised_user_circle</mat-icon>
-              </button>
-          </mat-toolbar-row>
-      </mat-toolbar>
-      <div class="routerOutlet">
-          <router-outlet></router-outlet>
-      </div>
-      <a mat-fab color="accent" matTooltip="Añadir juego" class="matFabAdd">
-          <mat-icon>add</mat-icon>
-      </a>
-  </mat-sidenav-content>
+                <button mat-icon-button [matTooltip]="authUser ? 'Cerrar sesión' : 'Iniciar sesión'" [routerLink]="['/login']" (click)="authUser ? authService.logout() : null">
+                    <mat-icon matBadgeColor="primary">{{authUser ? 'exit_to_app' : 'supervised_user_circle'}}</mat-icon>
+                </button>
+            </mat-toolbar-row>
+        </mat-toolbar>
+        <div class="routerOutlet">
+            <router-outlet></router-outlet>
+        </div>
+    </mat-sidenav-content>
 </mat-sidenav-container>

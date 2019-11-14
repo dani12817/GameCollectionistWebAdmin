@@ -1,0 +1,152 @@
+<div class="addGameContainer" fxLayout="column">
+    <div class="boxartContainer" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center end">
+        <div class="gameBoxartContainer">
+            <img [src]="gameBoxartURL ? gameBoxartURL : 'assets/img/no_image.jpg'">
+            <button mat-icon-button color="warn" class="boxartDeleteButton" (click)="removeNewBoxart()" *ngIf="gameBoxart && gameData.image"><mat-icon>redo</mat-icon></button>
+        </div>
+        <input class="boxartInput" type="file" (change)="selectBoxart($event)" />
+    </div>
+
+    <form [formGroup]="gameForm" class="gameForm" fxLayout="column" fxLayout.gt-xs="row wrap">
+        <mat-form-field appearance="outline">
+            <mat-label>Nombre</mat-label>
+            <input matInput type="text" placeholder="Nombre" formControlName="name" name="name" required>
+            <mat-error fxShow="hasError(gameForm, 'name')">{{ hasError(gameForm, 'name') }}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="marginField">
+            <mat-label>Código del Juego</mat-label>
+            <input matInput type="text" placeholder="Código del Juego" formControlName="game_code" name="game_code" required>
+            <mat-error fxShow="hasError(gameForm, 'game_code')">{{ hasError(gameForm, 'game_code') }}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Géneros</mat-label>
+            <mat-select placeholder="Géneros" formControlName="genres" multiple required>
+                <mat-option *ngFor="let genre of genres" [value]="genre">
+                    {{ genre }}
+                </mat-option>
+            </mat-select>
+            <mat-error fxShow="hasError(gameForm, 'platform')">{{ hasError(gameForm, 'platform') }}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="marginField">
+            <mat-label>Fecha de Lanzamiento</mat-label>
+            <input matInput [matDatepicker]="picker" placeholder="Fecha de Lanzamiento" formControlName="release_date" name="release_date">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Región</mat-label>
+            <mat-select placeholder="Región" formControlName="region" required>
+                <mat-option *ngFor="let region of gameRegions" [value]="region">
+                    <div class="matSelectOptionImage">
+                        <img [src]="gameMeth.getRegionImage(region)" class="optionImage">
+                        <div class="regionName">{{ region }}</div>
+                    </div>
+                </mat-option>
+            </mat-select>
+            <mat-error fxShow="hasError(gameForm, 'region')">{{ hasError(gameForm, 'region') }}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="marginField">
+            <mat-label>Plataforma</mat-label>
+            <mat-select placeholder="Plataforma" formControlName="platform" required>
+                <mat-option *ngFor="let platform of platforms" [value]="platform">
+                    <div class="matSelectOptionImage">
+                        <img [src]="gameMeth.getPlatformImage(platform)" class="optionImagePlatform">
+                        <div class="platformName">{{ platform }}</div>
+                    </div>
+                </mat-option>
+            </mat-select>
+            <mat-error fxShow="hasError(gameForm, 'platform')">{{ hasError(gameForm, 'platform') }}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Namecode</mat-label>
+            <input matInput type="text" placeholder="Namecode" formControlName="namecode" name="namecode">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="marginField">
+            <mat-label>Código de Barras</mat-label>
+            <input matInput type="text" placeholder="Código de Barras" formControlName="barcode" name="barcode" required>
+            <mat-error fxShow="hasError(gameForm, 'barcode')">{{ hasError(gameForm, 'barcode') }}</mat-error>
+        </mat-form-field>
+    </form>
+
+    <mat-divider></mat-divider>
+
+    <div class="gameOtherPlatformsContainer">
+        <div class="ggameOtherPlatformsTitleContainer" fxLayoutAlign="space-between center">
+            <div class="gameOtherPlatformsTitle">Otras Plataformas</div>
+            <button mat-icon-button (click)="openDialog(addOtherDialog, 'other_platforms')"><mat-icon>add</mat-icon></button>
+        </div>
+        <mat-list class="gameOtherPlatformsList">
+            <mat-list-item *ngFor="let platform of gameForm.get('other_platforms').value">
+                <img matListAvatar [src]="gameMeth.getPlatformImage(platform.platform)" [matTooltip]="platform.platform">
+                <p matLine>{{platform.game_code}}</p>
+                <button mat-icon-button>
+                    <mat-icon>clear</mat-icon>
+                </button>
+            </mat-list-item>
+        </mat-list>
+    </div>
+
+    <div class="gameOtherRegionsContainer">
+        <div class="gameOtherRegionsTitleContainer" fxLayoutAlign="space-between center">
+            <div class="gameOtherRegionsTitle">Otras Regiones</div>
+            <button mat-icon-button (click)="openDialog(addOtherDialog, 'other_regions')"><mat-icon>add</mat-icon></button>
+        </div>
+        <mat-list class="gameOtherRegionsList">
+            <mat-list-item *ngFor="let region of gameForm.get('other_regions').value">
+                <img matListAvatar [src]="gameMeth.getRegionImage(region.region)" [matTooltip]="region.region">
+                <p matLine>{{region.game_code}}</p>
+                <button mat-icon-button>
+                    <mat-icon>clear</mat-icon>
+                </button>
+            </mat-list-item>
+        </mat-list>
+    </div>
+    <button mat-raised-button color="primary" (click)="submitGame()" [disabled]="formIsInvalid()" fxFlex.xs>{{gameData.game_code ? 'Guardar' : 'Añadir'}} Juego</button>
+</div>
+
+<ng-template #addOtherDialog>
+    <h1 mat-dialog-title>Añadir {{addOtherAction == 'other_regions' ? 'región' : 'plataforma'}} relacionada al juego</h1>
+
+    <div mat-dialog-content class="addOtherDialogContent">
+        <mat-form-field class="searchInput" appearance="outline">
+            <input #textFilter matInput (keyup.enter)="filterGameList(textFilter.value)">
+        </mat-form-field>
+
+        <ng-container *ngIf="addOtherAction === 'other_regions'; else otherElse">
+            <mat-list>
+                <mat-list-item *ngFor="let game of addOtherGameList">
+                    <img matListAvatar class="{{game.region}} mat-list-avatar" [src]="gameMeth.getRegionImage(game.region)" [matTooltip]="game.region">
+                    <p matLine>{{game.name}}</p>
+                    <p matLine class="subText">{{game.platform}}</p>
+                    <button mat-icon-button (click)="addToOtherList(game)">
+                        <mat-icon>add</mat-icon>
+                    </button>
+                </mat-list-item>
+            </mat-list>
+        </ng-container>
+
+        <ng-template #otherElse>
+            <mat-list>
+                <mat-list-item *ngFor="let game of addOtherGameList">
+                    <img matListAvatar class="mat-list-avatar" [src]="gameMeth.getPlatformImage(game.platform)" [matTooltip]="game.platform">
+                    <p matLine>{{game.name}}</p>
+                    <p matLine class="subText">{{game.region}}</p>
+                    <button mat-icon-button (click)="addToOtherList(game)">
+                        <mat-icon>add</mat-icon>
+                    </button>
+                </mat-list-item>
+            </mat-list>
+        </ng-template>
+    </div>
+
+    <div mat-dialog-actions>
+        <button mat-button mat-dialog-close cdkFocusInitial>Cerrar</button>
+    </div>
+</ng-template>

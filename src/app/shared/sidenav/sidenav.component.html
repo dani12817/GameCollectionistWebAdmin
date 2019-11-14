@@ -1,0 +1,14 @@
+<header class="headerUser" fxLayout="column" fxLayoutAlign="end none" *ngIf="authUser">
+    <img [src]="authUser.avatar" [srcset]="authUser.avatar" [alt]="authUser.name">
+    <h2>{{ authUser.name }}</h2>
+    <span>{{ authUser.email }}</span>
+</header>
+
+<div class="sidenavMenu" *ngIf="authUser">
+    <mat-list>
+        <a mat-list-item *ngFor="let link of drawerLinks" [routerLink]="link.route" (click)="closeSideNav()">
+            <mat-icon mat-list-icon>{{ link.icon }}</mat-icon>
+            <h4 mat-line>{{ link.title }}</h4>
+        </a>
+    </mat-list>
+</div>

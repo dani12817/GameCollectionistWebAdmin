@@ -1,0 +1,48 @@
+<div class="gameDetailsContainer" *ngIf="gameData" fxLayout="row" fxLayoutAlign=" center">
+    <div class="gameBoxartContainer">
+        <img class="gameBoxart" [src]="gameData.image" [srcset]="gameData.image">
+        <button mat-icon-button color="accent" class="gameEditButton" [routerLink]="['/edit-game', gameData.game_code]"><mat-icon>edit</mat-icon></button>
+        <button mat-icon-button color="primary" class="gameAddButton" (click)="addGameToLibrary()" *ngIf="!gameData.game_on_library"><mat-icon>add</mat-icon></button>
+        <button mat-icon-button color="primary" class="gameAddButton" (click)="removeGameFromLibrary()" *ngIf="gameData.game_on_library"><mat-icon>remove</mat-icon></button>
+    </div>
+
+    <div class="gameDataContianer">
+        <div class="gameDataSection gameDataName">{{gameData.name}} <span *ngIf="gameData.original_name">[{{gameData.original_name}}]</span></div>
+
+        <div class="gameDataSection gameDataGenresContainer" *ngIf="gameData.genres">
+            <div class="gameDataSectionTitle">Género</div>
+            <mat-chip-list>
+                <mat-chip color="accent" *ngFor="let genre of gameData.genres" selected="true">{{genre}}</mat-chip>
+            </mat-chip-list>
+        </div>
+
+        <div class="gameDataSection gameDataPlatform">
+            <div class="gameDataSectionTitle">Plataforma / Otras Plataformas</div>
+            <div class="gameDataPlatforms" fxLayout="row wrap" fxLayoutAlign=" center">
+                <img [src]="gameMeth.getPlatformImage(gameData.platform)" [matTooltip]="gameData.platform">
+                <div class="slashDivider" *ngIf="gameData.other_platforms">/</div>
+                <img [src]="gameMeth.getPlatformImage(otherPlatform.platform)" *ngFor="let otherPlatform of gameData.other_platforms" [matTooltip]="otherPlatform.platform" [routerLink]="['/', otherPlatform.game_code]">
+            </div>
+        </div>
+
+        <div class="gameDataSection gameDataRegion">
+            <div class="gameDataSectionTitle">Región / Otras Regiones</div>
+            <div class="gameDataRegions" fxLayout="row" fxLayoutAlign=" center">
+                <img [class]="gameData.region" [src]="gameMeth.getRegionImage(gameData.region)" [matTooltip]="gameData.region">
+                <div class="slashDivider" *ngIf="gameData.other_regions">/</div>
+                <img [class]="otherRegion.region"  [src]="gameMeth.getRegionImage(otherRegion.region)" *ngFor="let otherRegion of gameData.other_regions" [matTooltip]="otherRegion.region" [routerLink]="['/', otherRegion.game_code]">
+            </div>
+        </div>
+
+        <div class="gameDataSection gameReleaseDate" *ngIf="gameData.release_date_full">
+            <div class="gameDataSectionTitle">Fecha de Lanzamiento</div>
+            <div class="gameDataReleaseDate">{{gameData.release_date_full}}</div>
+        </div>
+
+        <div class="gameDataSection"></div>
+
+        <div class="gameDataSection"></div>
+
+        <div class="gameDataSection"></div>
+    </div>
+</div>

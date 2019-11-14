@@ -1,0 +1,97 @@
+.addGameContainer {
+    padding: 24px;
+    max-width: 896px;
+    margin: 0 auto;
+
+    .boxartContainer {
+        margin-bottom: 16px;
+
+        .gameBoxartContainer {
+            margin-right: 16px;
+            position: relative;
+
+            img {
+                height: 256px;
+            }
+
+            .boxartDeleteButton {
+                left: 0;
+                top: 0;
+                position: absolute;
+            }
+        }
+    }
+
+    .boxartInput {
+        margin-bottom: 12px;
+    }
+
+    mat-divider {
+        margin-bottom: 16px;
+    }
+
+    .gameOtherPlatformsTitle, .gameOtherRegionsTitle {
+        font-weight: 600;
+        font-size: 24px;
+    }
+
+    .gameOtherPlatformsContainer, .gameOtherRegionsContainer {
+        margin-bottom: 16px;
+
+        /deep/ .mat-list-avatar {
+            height: auto !important;
+            border-radius: 0 !important;
+        }
+    }
+
+    .gameOtherPlatformsContainer {
+        /deep/ .mat-list-avatar {
+            width: 96px !important;
+        }
+    }
+
+    .gameOtherRegionsContainer {
+        /deep/ .mat-list-avatar {
+            width: 48px !important;
+        }
+    }
+}
+
+.addOtherDialogContent {
+    .searchInput {
+        width: 100%;
+    }
+
+    mat-list-item {
+        /deep/ .mat-list-item-content {
+            padding: 0 !important;
+        }
+    }
+
+    .mat-list-avatar {
+        width: 48px !important;
+        height: auto !important;
+        border-radius: 0 !important;
+    }
+
+    p {
+        white-space: initial !important;
+    }
+
+    .subText {
+        font-style: italic;
+    }
+}
+
+@media screen and (min-width: 600px) {
+    .addGameContainer {
+        .gameForm {
+            mat-form-field {
+                width: calc(50% - 6px);
+            }
+            mat-form-field.marginField {
+                margin-left: 12px;
+            }
+        }
+    }
+}

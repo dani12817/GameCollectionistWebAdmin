@@ -1,0 +1,39 @@
+mat-sidenav-container {
+    min-height: 100vh;
+    background-color: white;
+}
+
+mat-toolbar {
+    position: fixed;
+    z-index: 10;
+}
+
+.matFabAdd {
+    bottom: auto;
+    left: auto;
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+}
+
+@media screen and (min-width: 600px) {
+    .appLogo {
+        height: 60px;
+        cursor: pointer
+    }
+
+    .routerOutlet {
+        margin-top: 64px;
+    }
+}
+
+@media screen and (max-width: 599px) {
+    .appLogo {
+        height: 52px;
+        cursor: pointer
+    }
+
+    .routerOutlet {
+        margin-top: 56px;
+    }
+}

@@ -1,0 +1,87 @@
+.userLibraryContainer {
+    .platformTitleContainer {
+        margin-bottom: 12px;
+        
+        .platformTitle {
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+        }
+    }
+
+    .gameCardList {
+        .gameCard {
+            width: 160px;
+            margin: 12px;
+            cursor: pointer;
+        }
+    }
+
+    .platformLibraryList {
+        .platformLibraryCard {
+            width: 320px;
+            cursor: pointer;
+    
+            .platformLibraryImage {
+                width: inherit;
+            }
+    
+            .platformLibraryQuantity {
+                text-align: center;
+                margin-top: 6px;
+                font-size: 14px;
+                font-style: italic;
+                font-weight: bold;
+            }
+        }
+    }
+}
+
+@media screen and (min-width: 769px) {
+    .userLibraryContainer {
+        padding: 24px;
+
+        .platformLibraryList {
+            .platformLibraryCard {
+                margin: 12px;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .userLibraryContainer {
+        padding: 12px;
+
+        .platformLibraryList {
+            .platformLibraryCard:nth-child(odd){
+                margin-right: 6px;
+            }
+
+            .platformLibraryCard:nth-child(even){
+                margin-left: 6px;
+            }
+
+            .platformLibraryCard {
+                width: calc(50vw - 36px);
+                margin-bottom: 12px;
+                max-width: 260px;
+
+                .platformLibraryImage {
+                    max-width: 260px;
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 568px) {
+    .userLibraryContainer {
+        .gameCardList {
+            .gameCard {
+                width: 100px;
+                margin: 6px;
+            }
+        }
+    }
+}

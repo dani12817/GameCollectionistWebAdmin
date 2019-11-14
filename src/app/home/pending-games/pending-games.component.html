@@ -1,0 +1,15 @@
+<div class="pendingGamesContainer">
+  <div class="filtersContainer" fxLayout="row" fxLayoutAlign="end none">
+      <mat-form-field class="platformFilter" appearance="outline">
+          <mat-select placeholder="Plataforma" (selectionChange)="searchGamesPlatform($event.value)" value="Todas">
+              <mat-option value="Todas">Todas</mat-option>
+              <mat-option *ngFor="let platform of platforms" [value]="platform">
+                  {{ platform }}
+              </mat-option>
+          </mat-select>
+      </mat-form-field>
+  </div>
+  <div clas="gameCardList" fxLayout="row wrap" fxLayoutAlign="space-evenly center">
+      <img class="gameCard" *ngFor="let game of games" [src]="game.image" [alt]="game.name" [matTooltip]="game.name" [routerLink]="['/pending/', game.game_code]">
+  </div>
+</div>

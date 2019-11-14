@@ -1,0 +1,40 @@
+.pendingGamesContainer {
+    .filtersContainer {
+        margin-bottom: 12px;    
+
+        /deep/ .mat-form-field-wrapper {
+            padding-bottom: 0 !important;
+        }
+    }
+
+    .gameCard {
+        width: 160px;
+        margin: 12px;
+        cursor: pointer;
+    }
+}
+
+@media screen and (min-width: 769px) {
+    .pendingGamesContainer {
+        padding: 24px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .pendingGamesContainer {
+        padding: 12px;
+    }
+}
+
+@media screen and (max-width: 568px) {
+    .pendingGamesContainer {
+        .filtersContainer mat-form-field {
+            width: 100%; 
+        }
+
+        .gameCard {
+            width: 100px;
+            margin: 6px;
+        }
+    }
+}

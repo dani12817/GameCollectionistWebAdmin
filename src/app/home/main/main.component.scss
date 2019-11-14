@@ -1,0 +1,48 @@
+.mainContainer {
+    .filtersContainer {
+        margin-bottom: 12px;    
+
+        /deep/ .mat-form-field-wrapper {
+            padding-bottom: 0 !important;
+        }
+
+        .searchFilterContainer mat-form-field {
+            width: 320px; 
+        }
+    }
+
+    .gameCard {
+        width: 160px;
+        margin: 12px;
+        cursor: pointer;
+    }
+}
+
+@media screen and (min-width: 769px) {
+    .mainContainer {
+        padding: 24px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .mainContainer {
+        padding: 12px;
+    }
+}
+
+@media screen and (max-width: 568px) {
+    .mainContainer {
+        .filtersContainer {
+            flex-direction: column !important;
+
+            .searchFilterContainer mat-form-field {
+                width: 100%; 
+            }
+        }
+
+        .gameCard {
+            width: 100px;
+            margin: 6px;
+        }
+    }
+}

@@ -1,0 +1,19 @@
+<div class="userLibraryContainer">
+    <ng-container *ngIf="gamePlatformSelected; else showPlatforms">
+        <div class="platformTitleContainer" fxLayout="row" fxLayoutAlign="center center">
+            <div class="platformTitle">Juegos de {{gamePlatformSelected[0].platform}} guardados</div>
+            <button mat-icon-button (click)="gamePlatformSelected = null"><mat-icon>clear</mat-icon></button>
+        </div>
+        <div class="gameCardList" fxLayout="row wrap" fxLayoutAlign="space-evenly center">
+            <img class="gameCard" *ngFor="let game of gamePlatformSelected" [src]="game.image" [alt]="game.name" [matTooltip]="game.name" [routerLink]="['/', game.game_code]">
+        </div>
+    </ng-container>
+    <ng-template #showPlatforms>
+        <div class="platformLibraryList" fxLayout="row wrap" fxLayoutAlign="space-evenly center">
+            <div class="platformLibraryCard" *ngFor="let platform of objectKeys(userGamesLibrary)" (click)="selectGamePlatform(platform)">
+                <img class="platformLibraryImage" [src]="gameMeth.getPlatformImage(platform)" [alt]="platform" [matTooltip]="platform">
+                <div class="platformLibraryQuantity">({{userGamesLibrary[platform].length}}) guardado<span *ngIf="userGamesLibrary[platform].length > 1">s</span></div>
+            </div>
+        </div>
+    </ng-template>
+</div>

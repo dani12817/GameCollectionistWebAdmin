@@ -1,3 +1,37 @@
-<p>
-  login works!
-</p>
+<div class="bodyLoginContainer" fxLayout="row" fxLayoutAlign="center center">
+    <div class="loginContainer">
+        <img class="logoImage" src="assets/img/logo.png">
+
+        <div class="emailLoginContainer">
+            <form [formGroup]="loginForm" fxLayout="column">
+                <mat-form-field appearance="outline" class="full-width">
+                    <input matInput type="email" formControlName="email" placeholder="E-mail" required>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="full-width">
+                    <input matInput type="password" formControlName="password" placeholder="Contraseña" required>
+                </mat-form-field>
+
+                <button type="submit" mat-raised-button color="accent" (click)="dologinEmailPass()">Iniciar Sesión</button>
+            </form>
+        </div>
+
+        <div class="SNLoginContainer" fxLayout="column" fxLayoutAlign=" center">
+            <div class="googleLoginButton">
+                <img src="assets/img/login/google.png" (click)="dologinSocialNetwork('google')">
+            </div>
+
+            <div class="twitterLoginButton">
+                <img src="assets/img/login/twitter.png" (click)="dologinSocialNetwork('twitter')">
+            </div>
+
+            <div class="facebookLoginButton">
+                <img src="assets/img/login/facebook.png" (click)="dologinSocialNetwork('facebook')">
+            </div>
+        </div>
+
+        <div class="registerContainer">
+            <p>¿Sin cuenta? <a href="/register">Crear una cuenta</a></p>
+        </div>
+    </div>
+</div>
