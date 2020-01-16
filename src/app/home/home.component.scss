@@ -3,6 +3,10 @@ mat-sidenav-container {
     background-color: white;
 }
 
+mat-sidenav {
+    position: fixed;
+}
+
 mat-toolbar {
     position: fixed;
     z-index: 10;

@@ -1,26 +1,13 @@
 <div class="mainContainer">
-    <div class="filtersContainer" fxLayout="row" fxLayoutAlign="space-between none">
-        <div class="searchFilterContainer" fxLayout="row" fxLayoutAlign=" center">
-            <mat-form-field class="searchInput" appearance="outline">
-                <input #textFilter matInput (keyup.enter)="filterGame(textFilter.value)">
-            </mat-form-field>
-
-            <button mat-icon-button *ngIf="filterActive" (click)="filterActive = false" matTooltip="Eliminar filtros"><mat-icon>clear</mat-icon></button>
+    <button class="searchButton" mat-icon-button (click)="openSearchDialog()"><mat-icon>search</mat-icon></button>
+    <ng-container *ngIf="searchType == 'user'; else elseType">
+        <div clas="userCardList" fxLayout="row wrap" fxLayoutAlign="space-evenly center">
+            <app-user-card [user]="user" *ngFor="let user of userFiltered"></app-user-card>
         </div>
-
-        <mat-form-field class="platfomrFilter" appearance="outline">
-            <mat-select placeholder="Plataforma" (selectionChange)="searchGamesPlatform($event.value)" value="Todas">
-                <mat-option value="Todas">Todas</mat-option>
-                <mat-option *ngFor="let platform of platforms" [value]="platform">
-                    <div class="matSelectOptionImage">
-                        <img [src]="gameMeth.getPlatformImage(platform)" class="optionImagePlatform">
-                        <div class="platformName">{{ platform }}</div>
-                    </div>
-                </mat-option>
-            </mat-select>
-        </mat-form-field>
-    </div>
-    <div clas="gameCardList" fxLayout="row wrap" fxLayoutAlign="space-evenly center">
-        <img class="gameCard" *ngFor="let game of getGameList()" [src]="game.image" [alt]="game.name" [matTooltip]="game.name" [routerLink]="['/', game.game_code]">
-    </div>
+    </ng-container>
+    <ng-template #elseType>
+        <div clas="gameCardList" fxLayout="row wrap" fxLayoutAlign="space-evenly center">
+            <img class="gameCard" [ngClass]="{'collectorsEdition': game.collectors_edition}" *ngFor="let game of getGameList()" [src]="gameMeth.getGameImage(game)" [alt]="game.name" [matTooltip]="game.name" [routerLink]="['/', game.game_code]">
+        </div>
+    </ng-template>
 </div>

@@ -1,23 +1,25 @@
 <div class="addGameContainer" fxLayout="column">
     <div class="boxartContainer" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center end">
         <div class="gameBoxartContainer">
-            <img [src]="gameBoxartURL ? gameBoxartURL : 'assets/img/no_image.jpg'">
-            <button mat-icon-button color="warn" class="boxartDeleteButton" (click)="removeNewBoxart()" *ngIf="gameBoxart && gameData.image"><mat-icon>redo</mat-icon></button>
+            <img [src]="gameBoxart.url ? gameBoxart.url : 'assets/img/no_image.jpg'">
+            <button mat-icon-button color="warn" class="boxartDeleteButton" (click)="removeNewBoxart()" *ngIf="gameBoxart.file"><mat-icon>redo</mat-icon></button>
         </div>
         <input class="boxartInput" type="file" (change)="selectBoxart($event)" />
     </div>
 
-    <form [formGroup]="gameForm" class="gameForm" fxLayout="column" fxLayout.gt-xs="row wrap">
+    <form [formGroup]="gameForm.formGroup" class="gameForm" fxLayout="column" fxLayout.gt-xs="row wrap">
+        <mat-checkbox formControlName="collectors_edition">Edición Coleccionista</mat-checkbox>
+
         <mat-form-field appearance="outline">
             <mat-label>Nombre</mat-label>
             <input matInput type="text" placeholder="Nombre" formControlName="name" name="name" required>
-            <mat-error fxShow="hasError(gameForm, 'name')">{{ hasError(gameForm, 'name') }}</mat-error>
+            <mat-error fxShow="gameForm.hasError('name')">{{ gameForm.hasError('name') }}</mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="marginField">
             <mat-label>Código del Juego</mat-label>
             <input matInput type="text" placeholder="Código del Juego" formControlName="game_code" name="game_code" required>
-            <mat-error fxShow="hasError(gameForm, 'game_code')">{{ hasError(gameForm, 'game_code') }}</mat-error>
+            <mat-error fxShow="gameForm.hasError('game_code')">{{ gameForm.hasError('game_code') }}</mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
@@ -27,7 +29,7 @@
                     {{ genre }}
                 </mat-option>
             </mat-select>
-            <mat-error fxShow="hasError(gameForm, 'platform')">{{ hasError(gameForm, 'platform') }}</mat-error>
+            <mat-error fxShow="gameForm.hasError('platform')">{{ gameForm.hasError('platform') }}</mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="marginField">
@@ -47,7 +49,7 @@
                     </div>
                 </mat-option>
             </mat-select>
-            <mat-error fxShow="hasError(gameForm, 'region')">{{ hasError(gameForm, 'region') }}</mat-error>
+            <mat-error fxShow="gameForm.hasError('region')">{{ gameForm.hasError('region') }}</mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="marginField">
@@ -60,7 +62,7 @@
                     </div>
                 </mat-option>
             </mat-select>
-            <mat-error fxShow="hasError(gameForm, 'platform')">{{ hasError(gameForm, 'platform') }}</mat-error>
+            <mat-error fxShow="gameForm.hasError('platform')">{{ gameForm.hasError('platform') }}</mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
@@ -71,13 +73,13 @@
         <mat-form-field appearance="outline" class="marginField">
             <mat-label>Código de Barras</mat-label>
             <input matInput type="text" placeholder="Código de Barras" formControlName="barcode" name="barcode" required>
-            <mat-error fxShow="hasError(gameForm, 'barcode')">{{ hasError(gameForm, 'barcode') }}</mat-error>
+            <mat-error fxShow="gameForm.hasError('barcode')">{{ gameForm.hasError('barcode') }}</mat-error>
         </mat-form-field>
     </form>
 
     <mat-divider></mat-divider>
 
-    <div class="gameOtherPlatformsContainer">
+    <div class="gameOtherPlatformsContainer" *ngIf="gameAction !== 'requestGame'">
         <div class="ggameOtherPlatformsTitleContainer" fxLayoutAlign="space-between center">
             <div class="gameOtherPlatformsTitle">Otras Plataformas</div>
             <button mat-icon-button (click)="openDialog(addOtherDialog, 'other_platforms')"><mat-icon>add</mat-icon></button>
@@ -93,7 +95,7 @@
         </mat-list>
     </div>
 
-    <div class="gameOtherRegionsContainer">
+    <div class="gameOtherRegionsContainer" *ngIf="gameAction !== 'requestGame'">
         <div class="gameOtherRegionsTitleContainer" fxLayoutAlign="space-between center">
             <div class="gameOtherRegionsTitle">Otras Regiones</div>
             <button mat-icon-button (click)="openDialog(addOtherDialog, 'other_regions')"><mat-icon>add</mat-icon></button>
@@ -108,7 +110,7 @@
             </mat-list-item>
         </mat-list>
     </div>
-    <button mat-raised-button color="primary" (click)="submitGame()" [disabled]="formIsInvalid()" fxFlex.xs>{{gameData.game_code ? 'Guardar' : 'Añadir'}} Juego</button>
+    <button mat-raised-button color="primary" (click)="submitGame()" [disabled]="gameForm.formIsInvalid()" fxFlex.xs>{{gameData.game_code ? 'Guardar' : 'Añadir'}} Juego</button>
 </div>
 
 <ng-template #addOtherDialog>

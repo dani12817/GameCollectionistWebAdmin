@@ -1,0 +1,10 @@
+<div class="userCard" fxLayout="row" fxLayoutAlign=" start" *ngIf="user">
+    <img class="userAvatar" [src]="gameMeth.getAvatar(user)" [routerLink]="['/user/', user.nickname]">
+    <div class="userNameData" fxFlex [routerLink]="['/user/', user.nickname]">
+        <div class="userName">{{ user.name }}</div>
+        <div class="userNickname">@{{ user.nickname }}</div>
+    </div>
+    <button mat-icon-button [ngStyle]="{'color': getIconFriendButtonColor()}" [matTooltip]="getIconFriendButtonTooltip()" [disabled]="friendType == 'me'" (click)="friendButtonFuction()">
+        <mat-icon>{{ getIconFriendButton() }}</mat-icon>
+    </button>
+</div>

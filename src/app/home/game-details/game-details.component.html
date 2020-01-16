@@ -1,9 +1,7 @@
 <div class="gameDetailsContainer" *ngIf="gameData" fxLayout="row" fxLayoutAlign=" center">
     <div class="gameBoxartContainer">
         <img class="gameBoxart" [src]="gameData.image" [srcset]="gameData.image">
-        <button mat-icon-button color="accent" class="gameEditButton" [routerLink]="['/edit-game', gameData.game_code]"><mat-icon>edit</mat-icon></button>
-        <button mat-icon-button color="primary" class="gameAddButton" (click)="addGameToLibrary()" *ngIf="!gameData.game_on_library"><mat-icon>add</mat-icon></button>
-        <button mat-icon-button color="primary" class="gameAddButton" (click)="removeGameFromLibrary()" *ngIf="gameData.game_on_library"><mat-icon>remove</mat-icon></button>
+        <button mat-icon-button color="accent" class="gameEditButton" [routerLink]="['/edit-game', gameData.game_code]" *ngIf="authService.userLogged && authService.userLogged.admin"><mat-icon>edit</mat-icon></button>
     </div>
 
     <div class="gameDataContianer">
@@ -20,7 +18,7 @@
             <div class="gameDataSectionTitle">Plataforma / Otras Plataformas</div>
             <div class="gameDataPlatforms" fxLayout="row wrap" fxLayoutAlign=" center">
                 <img [src]="gameMeth.getPlatformImage(gameData.platform)" [matTooltip]="gameData.platform">
-                <div class="slashDivider" *ngIf="gameData.other_platforms">/</div>
+                <div class="slashDivider" *ngIf="gameData.other_platforms && gameData.other_platforms.length">/</div>
                 <img [src]="gameMeth.getPlatformImage(otherPlatform.platform)" *ngFor="let otherPlatform of gameData.other_platforms" [matTooltip]="otherPlatform.platform" [routerLink]="['/', otherPlatform.game_code]">
             </div>
         </div>
@@ -29,8 +27,8 @@
             <div class="gameDataSectionTitle">Región / Otras Regiones</div>
             <div class="gameDataRegions" fxLayout="row" fxLayoutAlign=" center">
                 <img [class]="gameData.region" [src]="gameMeth.getRegionImage(gameData.region)" [matTooltip]="gameData.region">
-                <div class="slashDivider" *ngIf="gameData.other_regions">/</div>
-                <img [class]="otherRegion.region"  [src]="gameMeth.getRegionImage(otherRegion.region)" *ngFor="let otherRegion of gameData.other_regions" [matTooltip]="otherRegion.region" [routerLink]="['/', otherRegion.game_code]">
+                <div class="slashDivider" *ngIf="gameData.other_regions && gameData.other_regions.length">/</div>
+                <img [class]="otherRegion.region" [src]="gameMeth.getRegionImage(otherRegion.region)" *ngFor="let otherRegion of gameData.other_regions" [matTooltip]="otherRegion.region" [routerLink]="['/', otherRegion.game_code]">
             </div>
         </div>
 
@@ -38,11 +36,73 @@
             <div class="gameDataSectionTitle">Fecha de Lanzamiento</div>
             <div class="gameDataReleaseDate">{{gameData.release_date_full}}</div>
         </div>
-
-        <div class="gameDataSection"></div>
-
-        <div class="gameDataSection"></div>
-
-        <div class="gameDataSection"></div>
     </div>
 </div>
+
+<div class="userGameContainer">
+    <div class="userGameTypeSection" *ngIf="authService.userLogged && gameData.userGame">
+        <mat-form-field appearance="outline">
+            <mat-label>Poner en mi Biblioteca de Juegos</mat-label>
+            <mat-select placeholder="Géneros" [(ngModel)]="gameData.userGame.type" (selectionChange)="addGameToLibrary(gameData.userGame.type)">
+                <mat-option [value]="'null'">Ninguna</mat-option>
+                <mat-option *ngFor="let userLibrary of objectKeys(userLibraries)" [value]="userLibrary">
+                    {{ userLibraries[userLibrary] }}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+
+    <div class="userGameDataSection" *ngIf="gameData.userGame && gameData.userGame.type === 'owned'">
+        <div class="userGameDataTitleContainer" fxLayoutAlign="space-between center">
+            <div class="gameDataSectionTitle" style="margin-bottom: 0;">Mis datos</div>
+            <button mat-icon-button (click)="openDialog(userGameDetailsDialog)"><mat-icon color="primary">edit</mat-icon></button>
+        </div>
+
+        <div class="userGameDataContainer">
+            <div class="userGameSection" *ngIf="gameData.userGame.price">
+                <strong>Precio: </strong> {{gameData.userGame.price | number:'.2'}} <span *ngIf="gameData.userGame.currency">{{currencies[gameData.userGame.currency].symbol}}</span>
+                <mat-chip color="accent" selected="true" *ngIf="gameData.userGame.currency">{{currencies[gameData.userGame.currency].name}}</mat-chip>
+            </div>
+
+            <div class="userGameSection">
+                <div class="userGameSection" *ngIf="gameData.userGame.bought_date">
+                    <strong>Fecha de Compra: </strong> {{gameData.userGame.bought_date | date :'EEEE, MMMM d, y'}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #userGameDetailsDialog>
+    <h1 mat-dialog-title>Mis Datos</h1>
+
+    <div mat-dialog-content class="userGameDetailsDialogContent">
+        <form class="userGameForm" [formGroup]="userGameForm.formGroup" *ngIf="userGameForm">
+            <mat-form-field appearance="outline">
+                <mat-label>Precio</mat-label>
+                <input matInput type="number" placeholder="Escribe el precio de compra" formControlName="price" name="price">
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>Divisa</mat-label>
+                <mat-select placeholder="Selecciona una divisa" formControlName="currency">
+                    <mat-option *ngFor="let currency of objectKeys(currencies)" [value]="currency">
+                        {{ currencies[currency].name }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>Fecha de compra</mat-label>
+                <input matInput [matDatepicker]="picker" placeholder="Selecciona una fecha" formControlName="bought_date" name="bought_date">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+        </form>
+    </div>
+
+    <div class="mat-dialog-actions" fxLayout="row" fxLayoutAlign="space-between none">
+        <button mat-button mat-dialog-close cdkFocusInitial>Cerrar</button>
+        <button mat-raised-button color="primary" (click)="submitUserGame()">Guardar</button>
+    </div>
+</ng-template>

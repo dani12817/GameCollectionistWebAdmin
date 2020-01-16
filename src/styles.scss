@@ -48,3 +48,66 @@ img.NTSC-J{
         margin-right: 8px;
     }
 }
+
+.searchButton {
+    position: fixed !important;
+    top: 12px;
+    right: 62px;
+    z-index: 10;
+    color:white !important;
+}
+
+.userCard {
+    box-shadow: 0 2px 1px -1px rgba(0,0,0,.2),0 1px 1px 0 rgba(0,0,0,.14),0 1px 3px 0 rgba(0,0,0,.12);
+    padding: 16px;
+    margin: 12px;
+    width: 320px;
+    max-width: 300px;
+
+    .userAvatar {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        cursor: pointer;
+    }
+
+    .userNameData {
+        margin: 0 16px;
+        cursor: pointer;
+
+        .userName {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .userNickname {
+            font-size: 14px;
+            font-weight: 500;
+            font-style: italic;
+        }
+    }
+}
+
+@media screen and (min-width: 769px) {
+    img.collectorsEdition {
+        width: 320px !important;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    img.collectorsEdition {
+        width: 200px !important;
+    }
+        
+    .userCard {
+        width: 100vw;
+        max-width: 360px;
+    }
+}
+
+@media screen and (max-width: 599px) {
+    .searchButton {
+        top: 8px;
+        right: 52px;
+    }
+}

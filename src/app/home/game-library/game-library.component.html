@@ -9,6 +9,12 @@
         </div>
     </ng-container>
     <ng-template #showPlatforms>
+        <div class="userGameTypeSection" *ngIf="!otherUser">
+            <mat-radio-group [(ngModel)]="selectLibrary" (change)="initializeLibrary()" fxLayout="row" fxLayoutAlign="space-evenly none">
+                <mat-radio-button [value]="userLibrary" *ngFor="let userLibrary of objectKeys(userLibraries)">{{ userLibraries[userLibrary] }}</mat-radio-button>
+            </mat-radio-group>
+        </div>
+
         <div class="platformLibraryList" fxLayout="row wrap" fxLayoutAlign="space-evenly center">
             <div class="platformLibraryCard" *ngFor="let platform of objectKeys(userGamesLibrary)" (click)="selectGamePlatform(platform)">
                 <img class="platformLibraryImage" [src]="gameMeth.getPlatformImage(platform)" [alt]="platform" [matTooltip]="platform">

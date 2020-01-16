@@ -1,0 +1,31 @@
+<div class="userDataContainer" *ngIf="userDataForm">
+    <div class="userAvatarContainer" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center end">
+        <div class="avatartContainer">
+            <img [src]="userAvatar.url ? userAvatar.url : 'assets/img/no_image.jpg'">
+            <button mat-icon-button color="warn" class="boxartDeleteButton" (click)="removeNewAvatar()" *ngIf="userAvatar.file"><mat-icon>redo</mat-icon></button>
+        </div>
+        <input class="boxartInput" type="file" (change)="selectAvatar($event)" />
+    </div>
+
+    <form [formGroup]="userDataForm.formGroup" class="userDataForm" fxLayout="row wrap">
+        <mat-form-field appearance="outline">
+            <mat-label>Nombre Completo</mat-label>
+            <input matInput type="text" placeholder="Nombre" formControlName="name" name="name" required>
+            <mat-error fxShow="userDataForm.hasError('name')">{{ userDataForm.hasError('name') }}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Nickname</mat-label>
+            <input matInput type="text" placeholder="Nickname" formControlName="nickname" name="nickname" [readonly]="true" required>
+            <mat-error fxShow="userDataForm.hasError('nickname')">{{ userDataForm.hasError('nickname') }}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>E-mail</mat-label>
+            <input matInput type="text" placeholder="E-mail" formControlName="email" name="email" [readonly]="true" required>
+            <mat-error fxShow="userDataForm.hasError('email')">{{ userDataForm.hasError('email') }}</mat-error>
+        </mat-form-field>
+        
+        <button mat-raised-button color="primary" (click)="submitData()" [disabled]="userDataForm.formIsInvalid()">Guardar cambios</button>
+    </form>
+</div>

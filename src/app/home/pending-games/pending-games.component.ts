@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
+
+import { GameService } from '../../providers/game.service';
 
 import { Game } from '../../models/game';
+
 import { platforms } from '../../shared/constant';
 
 @Component({
@@ -11,25 +13,14 @@ import { platforms } from '../../shared/constant';
 })
 export class PendingGamesComponent {
   games: Game[];
-  platforms: string[] = platforms;
 
-  constructor(private afs: AngularFirestore) {
+  constructor(private gameService: GameService) {
     this.initGameList();
   }
 
   initGameList() {
-    this.afs.collection<Game>('pendingGames').valueChanges().subscribe(response => {
+    this.gameService.getAllGames(true).then(response => {
       this.games = response;
     });
-  }
-
-  searchGamesPlatform(platform){
-    if (platform == 'Todas') {
-      this.initGameList();
-    } else {
-      this.afs.collection<Game>('pendingGames', ref => ref.where("platform", "==", platform)).valueChanges().subscribe(response => {
-        this.games = response;
-      });
-    }
   }
 }

@@ -1,0 +1,14 @@
+.dialog-toolbar-content {
+    .searchForm {
+        display: flex;
+        flex-direction: column;
+
+        mat-radio-group {
+            margin-bottom: 16px;
+        }
+    }
+
+    button {
+        width: 100%;
+    }
+}

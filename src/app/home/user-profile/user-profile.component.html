@@ -1,0 +1,42 @@
+<div class="userProfileContainer">
+    <mat-tab-group mat-stretch-tabs>
+        <mat-tab label="Perfil">
+            <div class="userProfileTab" fxLayout="row" fxLayout.xs="column" fxLayoutGap="16px">
+                <div class="userAvatarContainer" >
+                    <img [src]="userData.avatar ? userData.avatar : 'assets/img/no_image.jpg'">
+                </div>
+
+                <div class="userDataContainer">
+                    <div class="userDataSection">
+                        <div class="userDataSectionTitle">Nombre</div>
+                        <div class="userDataField">{{userData.name}}</div>
+                    </div>
+
+                    <div class="userDataSection">
+                        <div class="userDataSectionTitle">Nickname</div>
+                        <div class="userDataField">{{userData.nickname}}</div>
+                    </div>
+
+                    <div class="userDataSection">
+                        <div class="userDataSectionTitle">E-mail</div>
+                        <div class="userDataField">{{userData.email}}</div>
+                    </div>
+                </div>
+            </div>
+        </mat-tab>
+        
+        <mat-tab label="Librería">
+            <div class="userGameLibraryTab">
+                <app-game-library [userLibrary]="userData.games" [otherUser]="true"></app-game-library>
+            </div>
+        </mat-tab>
+
+        <mat-tab label="Amigos">
+            <div class="userFriendsTab">
+                <div clas="userCardList" fxLayout="row wrap" fxLayoutAlign="space-evenly center">
+                    <app-user-card [user]="user" *ngFor="let user of userFriends"></app-user-card>
+                </div>
+            </div>
+        </mat-tab>
+    </mat-tab-group>
+</div>

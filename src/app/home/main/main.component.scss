@@ -27,11 +27,7 @@
 @media screen and (max-width: 768px) {
     .mainContainer {
         padding: 12px;
-    }
-}
-
-@media screen and (max-width: 568px) {
-    .mainContainer {
+        
         .filtersContainer {
             flex-direction: column !important;
 

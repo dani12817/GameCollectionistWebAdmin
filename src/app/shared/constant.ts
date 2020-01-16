@@ -1,4 +1,13 @@
+export let userLibraries: any = {owned: "Lo tengo", wishlist: "Lista de deseados"};
+
 export let gameRegions: string[] = ["PAL", "NTSC-J", "NTSC-U", "NTSC-A"];
+
+export let currencies: any = {
+  yen: {name: 'Yen Japonés', symbol: '¥'},
+  euro: {name: 'Euro', symbol: '€'},
+  dolar: {name: 'Dolar Americano', symbol: '$'},
+  pound: {name: 'Libra Esterlina', symbol: '£'},
+};
 
 export let platforms: string[] = [
   "Dreamcast",

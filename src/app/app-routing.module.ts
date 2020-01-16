@@ -8,14 +8,21 @@ import { GameLibraryComponent } from './home/game-library/game-library.component
 import { AddGameComponent } from './home/add-game/add-game.component';
 import { PendingGamesComponent } from './home/pending-games/pending-games.component';
 import { GameDetailsComponent } from './home/game-details/game-details.component';
+import { UserDataComponent } from './home/user-data/user-data.component';
+import { UserProfileComponent } from './home/user-profile/user-profile.component';
 
 import { AuthGuard } from './shared/auth-guard.service';
 import { AdminGuard } from './shared/admin-guard.service';
 
 import { AuthUserResolverService } from './shared/resolvers/auth-user-resolver.service';
 import { GameDetailsResolverService } from './home/game-details/game-details-resolver.service';
+import { UserDataResolverService } from './shared/resolvers/user-data-resolver.service';
 
 const routes: Routes = [
+  {
+    path: 'login',
+    component: LoginComponent,
+  },
   {
     path: '',
     component: HomeComponent,
@@ -28,9 +35,30 @@ const routes: Routes = [
         component: MainComponent,
       },
       {
+        path: 'user-data',
+        component: UserDataComponent,
+        canActivate: [AuthGuard],
+        resolve: {
+          userData: UserDataResolverService
+        }
+      },
+      {
+        path: 'user/:nickname',
+        component: UserProfileComponent,
+        canActivate: [AuthGuard],
+        resolve: {
+          userData: UserDataResolverService
+        }
+      },
+      {
         path: 'my-games',
         component: GameLibraryComponent,
         canActivate: [AuthGuard],
+      },
+      {
+        path: 'request-game',
+        component: AddGameComponent,
+        canActivate: [AdminGuard],
       },
       {
         path: 'add-game',
@@ -50,7 +78,7 @@ const routes: Routes = [
         component: AddGameComponent,
         canActivate: [AdminGuard],
         resolve: {
-          pendingGameData: GameDetailsResolverService
+          gameData: GameDetailsResolverService
         }
       },
       {
@@ -66,10 +94,6 @@ const routes: Routes = [
         }
       }
     ]
-  },
-  {
-    path: 'login',
-    component: LoginComponent,
   }
 ];
 

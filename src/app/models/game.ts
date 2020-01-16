@@ -1,3 +1,5 @@
+import { UserGame } from './user';
+
 export class Game {
   game_code: string;
   genres: string[];
@@ -12,6 +14,7 @@ export class Game {
   release_date: Date;
   release_date_full: string;
   game_on_library?: boolean;
+  userGame: UserGame;
 
   constructor(gameData?) {
     Object.assign(this, gameData)

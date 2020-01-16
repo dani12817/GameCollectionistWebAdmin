@@ -1,0 +1,72 @@
+<mat-toolbar color="primary" class="mat-elevation-z1">
+    <mat-toolbar-row>
+        <button mat-icon-button class="menu-button" mat-dialog-close><mat-icon>arrow_back</mat-icon></button>
+        <span class="toolbar-separator"></span>
+
+        <div class="dialog-toolbar-title">Filtros de búsqueda</div>
+
+        <span class="toolbar-separator"></span>
+
+        <button mat-icon-button color="accent" matTooltip="Aplicar filtros" (click)="submitSearch()"><mat-icon>check</mat-icon></button>
+    </mat-toolbar-row>
+</mat-toolbar>
+
+<div class="dialog-toolbar-content">
+    <form class="searchForm" [formGroup]="searchForm.formGroup">
+        <mat-radio-group formControlName="type" fxLayout="row" fxLayoutAlign="space-evenly none" (change)="resetForm()">
+            <mat-radio-button value="game">Juego</mat-radio-button>
+            <mat-radio-button value="user">Usuario</mat-radio-button>
+        </mat-radio-group>
+
+        <div class="searchUsersFields" *ngIf="searchForm.formGroup.get('type').value == 'user'" fxLayout="column" fxLayoutAlign=" none">
+            <mat-form-field appearance="outline">
+                <mat-label>Nickname</mat-label>
+                <input matInput type="text" placeholder="Nickname" formControlName="nickname" name="nickname">
+            </mat-form-field>
+        </div>
+
+        <div class="searchGamesFields" *ngIf="searchForm.formGroup.get('type').value == 'game'" fxLayout="column" fxLayoutAlign=" none">
+            <mat-form-field appearance="outline">
+                <mat-label>Nombre</mat-label>
+                <input matInput type="text" placeholder="Nombre" formControlName="name" name="name">
+            </mat-form-field>
+    
+            <mat-form-field appearance="outline">
+                <mat-label>Código del juego</mat-label>
+                <input matInput type="text" placeholder="Código del juego" formControlName="game_code" name="game_code">
+            </mat-form-field>
+    
+            <mat-form-field appearance="outline">
+                <mat-label>Plataforma</mat-label>
+                <mat-select placeholder="Plataforma" formControlName="platform" multiple>
+                    <mat-option *ngFor="let platform of platforms" [value]="platform">
+                        <div class="matSelectOptionImage">
+                            <img [src]="gameMeth.getPlatformImage(platform)" class="optionImagePlatform">
+                            <div class="platformName">{{ platform }}</div>
+                        </div>
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+    
+            <mat-form-field appearance="outline">
+                <mat-label>Región</mat-label>
+                <mat-select placeholder="Región" formControlName="region" multiple>
+                    <mat-option *ngFor="let region of regions" [value]="region">
+                        <div class="matSelectOptionImage">
+                            <img [src]="gameMeth.getRegionImage(region)" class="optionImage">
+                            <div class="regionName">{{ region }}</div>
+                        </div>
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+    
+            <mat-form-field appearance="outline">
+                <mat-label>Género</mat-label>
+                <mat-select placeholder="Género" formControlName="genres" multiple>
+                    <mat-option *ngFor="let genre of genres" [value]="genre">{{ genre }}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+    </form>
+    <button mat-raised-button color="primary" (click)="resetForm()">Eliminar filtros</button>
+</div>

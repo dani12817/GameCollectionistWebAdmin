@@ -1,7 +1,21 @@
-.gameDetailsContainer {
+.gameDetailsContainer, .userGameContainer {
     max-width: 896px;
     margin: 0 auto;
 
+    .gameDataSectionTitle {
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+
+    
+    mat-chip {
+        font-weight: 600;
+        cursor: pointer;
+    }
+}
+
+.gameDetailsContainer {
     .gameBoxartContainer {
         position: relative;
 
@@ -25,12 +39,6 @@
             margin-bottom: 16px;
         }
 
-        .gameDataSectionTitle {
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-
         .gameDataName {
             font-weight: 600;
             font-size: 24px;
@@ -47,11 +55,12 @@
                 margin-left: -16px;
             }
 
-            mat-chip-list {
-                mat-chip {
-                    font-weight: 600;
-                    cursor: pointer;
-                }
+            mat-chip-list /deep/ .mat-chip-list-wrapper {
+                place-content: stretch space-evenly;
+                align-items: stretch;
+                flex-direction: row;
+                box-sizing: border-box;
+                display: flex;
             }
         }
 
@@ -86,8 +95,38 @@
     }
 }
 
+.userGameContainer {
+    margin-bottom: 16px;
+
+    .userGameDataSection {
+        .userGameDataContainer {
+            padding: 0 16px;
+
+            .userGameSection:not(:last-child) {
+                margin-bottom: 8px;
+            }
+
+            mat-chip {
+                margin-left: 16px;
+            }
+        }
+    }
+}
+
+.userGameDetailsDialogContent {
+    .userGameForm {
+        mat-form-field {
+            width: 100%;
+        }
+    }
+}
+
+.mat-dialog-actions {
+    padding-bottom: 24px !important;
+}
+
 @media screen and (min-width: 769px) {
-    .gameDetailsContainer {
+    .gameDetailsContainer, .userGameContainer {
         padding: 24px;
 
         .gameBoxart {
@@ -108,8 +147,11 @@
 }
 
 @media screen and (max-width: 768px) {
+    .gameDetailsContainer, .userGameContainer {
+        padding: 16px;
+    }
+
     .gameDetailsContainer {
-        padding: 24px;
         flex-direction: column !important;
 
         .gameBoxart {
@@ -128,10 +170,16 @@
             }
         }
     }
+
+    .userGameContainer {
+        .userGameTypeSection > mat-form-field {
+            width: 100%;
+        }
+    }
 }
 
 @media screen and (max-width: 568px) {
-    .gameDetailsContainer {
+    .gameDetailsContainer, .userGameContainer {
         padding: 12px;
     }
 }

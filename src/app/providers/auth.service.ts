@@ -14,11 +14,13 @@ export class AuthService {
   constructor(public afAuth: AngularFireAuth, private afs: AngularFirestore) { }
 
   getLoggedInUser(): Promise<User> {
-    return new Promise((resolve, reject) => {      
+    return new Promise((resolve, reject) => {
+      console.log("getLoggedInUser", this.userLogged);
       if(this.userLogged) { resolve(this.userLogged); }
       this.afAuth.auth.onAuthStateChanged(user => {
         if (user) {
-          this.usersGameLibrary.doc(user.uid).valueChanges().subscribe((userLibrary: User) => {
+          let sub = this.usersGameLibrary.doc(user.uid).valueChanges().subscribe((userLibrary: User) => {
+            sub.unsubscribe();
             this.userLogged = userLibrary;
             resolve(userLibrary);
           });
@@ -32,7 +34,14 @@ export class AuthService {
   loginEmailPass(loginData: {email: string, password: string}) {
     return new Promise<any>((resolve, reject) => {
       this.afAuth.auth.signInWithEmailAndPassword(loginData.email, loginData.password).then(response => {
-        resolve(response);
+        this.getLoggedInUser().then(userLogged => {
+          console.log("loginEmailPass signInWithEmailAndPassword", userLogged);
+          if (userLogged === undefined) {
+            // console.log("initializeUser");
+            this.userLogged = this.initializeUser(response);
+          } else { this.userLogged = userLogged; }
+          resolve(response);
+        }, err => reject(err));
       }, err => reject(err));
     });
   }
@@ -40,6 +49,14 @@ export class AuthService {
   loginSocialNetwork(provider) {
     return new Promise<any>((resolve, reject) => {
       this.afAuth.auth.signInWithPopup(provider).then(response => {
+        this.getLoggedInUser().then(userLogged => {
+          console.log("loginSocialNetwork signInWithPopup", userLogged);
+          if (userLogged === undefined) {
+            // console.log("initializeUser");
+            this.userLogged = this.initializeUser(response);
+          } else { this.userLogged = userLogged; }
+          resolve(response);
+        }, err => reject(err));
         resolve(response);
       }, err => reject(err));
     });
@@ -48,5 +65,11 @@ export class AuthService {
   logout() {
     this.userLogged = null;
     this.afAuth.auth.signOut();
+  }
+
+  initializeUser(userData: firebase.auth.UserCredential): User{
+    let user = new User(userData);
+    this.afs.collection<User[]>("usersGameLibrary").doc(userData.user.uid).set(Object.assign({}, user));
+    return user;
   }
 }

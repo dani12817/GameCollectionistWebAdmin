@@ -17,10 +17,15 @@
         }
     }
 
+    .userGameTypeSection {
+        font-weight: 700;
+    }
+
     .platformLibraryList {
         .platformLibraryCard {
             width: 320px;
             cursor: pointer;
+            margin-bottom: 12px;
     
             .platformLibraryImage {
                 width: inherit;

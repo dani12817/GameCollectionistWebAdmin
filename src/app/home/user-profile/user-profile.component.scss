@@ -1,0 +1,56 @@
+.userProfileContainer {
+    .userProfileTab, .userGameLibraryTab, .userFriendsTab {
+        padding: 24px;
+    }
+
+    .userProfileTab {
+        max-width: 896px;
+        margin: 0 auto;
+        
+        .userAvatarContainer {
+            margin-right: 32px !important;
+
+            img {
+                width: 256px;
+                height: 256px;
+                border-radius: 50%;
+            }
+        }
+
+        .userDataContainer {
+            .userDataSection:not(:last-child) {
+                margin-bottom: 16px;
+            }
+
+            .userDataSectionTitle {
+                font-weight: 700;
+                font-size: 18px;
+            }
+
+            .userDataField {
+                font-weight: 500;
+                font-size: 16px;
+                margin-left: 12px;
+            }
+        }
+    }
+
+    .userGameLibraryTab {
+        .gameCard {
+            width: 160px;
+            margin: 12px;
+            cursor: pointer;
+        }
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .userProfileContainer {
+        .userGameLibraryTab {
+            .gameCard {
+                width: 100px;
+                margin: 6px;
+            }
+        }
+    }
+}

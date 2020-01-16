@@ -1,8 +1,15 @@
 import { Component } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
+import { MatDialog } from '@angular/material';
+
+import { SearchDialogComponent } from '../../shared/dialogs/search-dialog/search-dialog.component';
+
+import { GameService } from '../../providers/game.service';
+import { UserService } from '../../providers/user.service';
 
 import { Game } from '../../models/game';
-import { platforms } from '../../shared/constant';
+import { SearchForm } from '../../models/search';
+import { User } from '../../models/user';
+
 import { GameMethods } from '../../shared/game-methods';
 
 @Component({
@@ -12,44 +19,72 @@ import { GameMethods } from '../../shared/game-methods';
 })
 export class MainComponent {
   games: Game[]; gameMeth = GameMethods;
-  platforms: string[] = platforms;
-  gamesFiltered: Game[]; filterActive: boolean = false;
+  gamesFiltered: Game[]; userFiltered: User[];
+  searchType: string; filters: SearchForm = {};
 
-  constructor(private afs: AngularFirestore) {
+  constructor(private gameService: GameService, private userService: UserService, private dialog: MatDialog) {
     this.initGameList();
+    this.filterUser({});
   }
 
   initGameList() {
-    this.afs.collection<Game>('games').valueChanges().subscribe(response => {
+    this.gameService.getAllGames().then(response => {
       this.games = response;
     });
   }
 
-  searchGamesPlatform(platform){
-    if (platform == 'Todas') {
-      this.initGameList();
-    } else {
-      this.afs.collection<Game>('games', ref => ref.where("platform", "==", platform)).valueChanges().subscribe(response => {
-        this.games = response;
-      });
-    }
+  getGameList() {
+    return (Object.keys(this.filters).length > 0) ? this.gamesFiltered : this.games;
   }
 
-  filterGame(textFilter: string) {
-    if (textFilter.trim().length > 0) {
-      console.log(textFilter);
-      this.gamesFiltered = [];
+  openSearchDialog() {
+    console.log("filters", this.filters);
+    if (this.searchType) { this.filters.type = this.searchType; }
+    let searchDialog = this.dialog.open(SearchDialogComponent, {panelClass: 'mat-dialog-toolbar', data: this.filters});
+    let sub = searchDialog.beforeClose().subscribe((response: SearchForm) => {
+      sub.unsubscribe();
+        this.searchType = response.type; delete response.type;
+        this.filters = response;
+        if (this.searchType == 'user') {
+          this.filterUser(response);
+        } else {
+          this.filterGame(response);
+        }
+    });
+  }
+
+  private filterUser(filters: SearchForm) {
+    this.userFiltered = [];
+    this.userService.searchUser(filters.nickname).then(response => {
+      this.userFiltered = response;
+    }).catch(err => console.error(err))
+  }
+
+  private filterGame(filters: SearchForm) {
+    this.gamesFiltered = [];
+    if (Object.keys(filters).length > 0) {
       for (const game of this.games) {
-        if (game.name.toLowerCase().includes(textFilter.toLowerCase())) {
+        if (this.applyFilter(game, filters)) {
           this.gamesFiltered.push(game);
         }
       }
-      this.filterActive = true;
-      // this.games = this.afs.collection<Game>('games', ref => ref.where("namecode", ">=", textFilter)).valueChanges();
     }
   }
 
-  getGameList() {
-    return this.filterActive ? this.gamesFiltered : this.games;
+  private applyFilter(game: Game, filters: SearchForm): boolean {
+    let addGame: boolean;
+    for (const filter of Object.keys(filters)) {
+      if (filter == 'name' || filter == 'game_code') {
+        addGame = game[filter].toLowerCase().includes(filters[filter].toLowerCase());
+      } else if (filter == 'platform' || filter == 'region') {
+        addGame = (filters[filter].indexOf(game[filter]) > -1);
+      } else if (filter == 'genres' && game.genres) {
+        for (const genre of filters[filter]) {
+          addGame = (game.genres.indexOf(genre) > -1);
+          if (addGame) { break; }
+        }
+      }
+    }
+    return addGame;
   }
 }

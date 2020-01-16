@@ -10,48 +10,68 @@ import { Game } from "../models/game";
 export class GameService {
   gameCollection = this.afs.collection<Game>("games");
 
-    constructor(private storage: AngularFireStorage, private afs: AngularFirestore) { }
+  constructor(private storage: AngularFireStorage, private afs: AngularFirestore) { }
 
-    getAllGames(): Promise<Game[]> {
-      return new Promise<Game[]>((resolve, reject) => {
-        this.gameCollection.valueChanges().subscribe(response => {
-          resolve(response);
-        }, err => reject(err));
-      });
-    }
+  getAllGames(pending?: boolean): Promise<Game[]> {
+    return new Promise<Game[]>((resolve, reject) => {
+      let sub = this.afs.collection<Game>(pending ? 'pendingGames' : 'games').valueChanges().subscribe(response => {
+        sub.unsubscribe();
+        resolve(response);
+      }, err => reject(err));
+    });
+  }
 
-    getGameByGameCode(game_code: string, pending?: boolean): Promise<Game> {
-      return new Promise<any>((resolve, reject) => {
-        this.afs.collection<Game>(pending ? 'pendingGames' : 'games').doc<Game>(game_code).valueChanges().subscribe(response => {
-          resolve(new Game(response));
-        }, err => reject(err));
-      });
-    }
+  getAllPlatformGames(platform: string, pending?: boolean): Promise<Game[]> {
+    return new Promise<Game[]>((resolve, reject) => {
+      let sub = this.afs.collection<Game>(pending ? 'pendingGames' : 'games', ref => ref.where("platform", "==", platform)).valueChanges().subscribe(response => {
+        sub.unsubscribe();
+        resolve(response);
+      }, err => reject(err));
+    });
+  }
 
-    createGame(gameData: Game, boxart): Promise<Game> {
-      return this.saveWithBoxart(boxart, gameData);
-    }
+  getGameByGameCode(game_code: string, pending?: boolean): Promise<Game> {
+    return new Promise<any>((resolve, reject) => {
+      let sub = this.afs.collection<Game>(pending ? 'pendingGames' : 'games').doc<Game>(game_code).valueChanges().subscribe(response => {
+        sub.unsubscribe();
+        resolve(new Game(response));
+      }, err => reject(err));
+    });
+  }    
 
-    private async saveWithBoxart(boxart, gameData: Game) {
-      return new Promise<Game>((resolve, reject) => {
-        const fileRef = this.storage.ref(`games/${gameData.game_code}.${boxart.name.split(".")[1]}`);
-        const metaData = { contentType: boxart.type };
+  createGame(gameData: Game, boxart, pending: boolean): Promise<Game> {
+    if (boxart) {
+      return this.saveWithBoxart(Object.assign({}, gameData), boxart, pending);
+    } else { return this.saveGameData(Object.assign({}, gameData)); }
+  }
+
+  private saveWithBoxart(gameData: Game, boxart, pending: boolean) {
+	  return new Promise<any>((resolve, reject) => {
+  		const fileRef = this.storage.ref(`games/${gameData.game_code}`);
+      const metaData = { contentType: boxart.type };
+      console.log("saveWithBoxart", gameData, boxart, pending);
   
-        fileRef.put(boxart, metaData).then(snapshot => {
-          snapshot.ref.getDownloadURL().then(downloadURL => {
-            gameData.image = downloadURL;
-            this.saveGameData(gameData).then(response => {
-              resolve(response);
-            });
-            console.log("Juego Creado");
-          }, err => reject(err));
-        }, err => reject(err));
-      });
+  		fileRef.put(boxart, metaData).then(snapshot => {
+        console.log("put");
+  		  snapshot.ref.getDownloadURL().then(downloadURL => {
+    			gameData.image = downloadURL;
+    			gameData.namecode = this.generateNameCode(gameData.name);
+    			this.afs.collection<Game>(pending ? 'pendingGames' : 'games').doc(gameData.game_code).set(gameData);
+    			resolve(gameData);
+  		  }).catch(err => reject(err));
+  		}).catch(err => reject(err));
+	  });
+  }
+
+  private generateNameCode(name: string): string {
+    name = name.toLowerCase();
+    name = name.replace('(', '').replace(')', '').replace('.', '').replace(',', '').replace('!', '').replace('?', '').replace(':', '').replace('/', '').replace('\'', '');
+    return name;
   }
 
   updateGame(gameData: Game, boxart): Promise<Game> {
     if (boxart) {
-      return this.saveWithBoxart(boxart, Object.assign({}, gameData));
+      return this.saveWithBoxart(Object.assign({}, gameData), boxart, false);
     } else { return this.saveGameData(Object.assign({}, gameData)); }
   }
   
@@ -71,12 +91,16 @@ export class GameService {
     });
   }
 
-  gameExist(game_code: string): Promise<Boolean> {
-    return new Promise<Boolean>((resolve, reject) => {
+  gameExist(game_code: string): Promise<{error?: string, exist: boolean}> {
+    return new Promise<{error?: string, exist: boolean}>((resolve, reject) => {
       this.getGameByGameCode(game_code).then(response => {
         if (response.game_code === null || response.game_code === undefined) {
-          resolve(false);
-        } else { resolve (true); }
+          this.getGameByGameCode(game_code, true).then(response => {
+            if (response.game_code === null || response.game_code === undefined) {
+              resolve({exist: false});
+            } else { resolve ({error: 'El juego está pendiente de aprobación', exist: true}); }
+          }).catch(err => reject(err));
+        } else { resolve ({error: 'El juego ya existe', exist: true}); }
       }).catch(err => reject(err));
     });
   }

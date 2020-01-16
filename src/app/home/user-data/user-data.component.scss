@@ -1,0 +1,67 @@
+.userDataContainer {
+    padding: 24px;
+    max-width: 896px;
+    margin: 0 auto;
+
+    .userAvatarContainer {
+        margin-bottom: 16px;
+
+        .avatartContainer {
+            margin-right: 16px;
+            position: relative;
+
+            img {
+                width: 256px;
+                height: 256px;
+                border-radius: 50%;
+            }
+
+            .boxartDeleteButton {
+                left: 0;
+                top: 0;
+                position: absolute;
+            }
+        }
+    }
+
+    .boxartInput {
+        margin-bottom: 12px;
+    }
+
+    
+    .userDataForm {
+        mat-form-field, button {
+            width: 100%;
+        }
+    }
+}
+
+@media screen and (min-width: 600px) {
+    .userDataContainer {
+        .userAvatarContainer {    
+            .avatartContainer {
+                margin-right: 16px;
+            }
+        }
+
+        .userDataForm {
+            mat-form-field {
+                width: calc(50% - 6px) !important;
+            }
+
+            mat-form-field:nth-child(even) {
+                margin-left: 12px;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 599px) {
+    .userDataContainer {
+        .userAvatarContainer {    
+            .avatartContainer {
+                margin: auto;
+            }
+        }
+    }
+}
