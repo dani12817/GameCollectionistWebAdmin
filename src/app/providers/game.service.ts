@@ -37,6 +37,9 @@ export class GameService {
         resolve(new Game(response));
       }, err => reject(err));
     });
+  } 
+  getGameImageByGameCode(game_code: string): Promise<string> {
+    return this.storage.storage.ref(`/games/${game_code}`).getDownloadURL()
   }    
 
   createGame(gameData: Game, boxart, pending: boolean): Promise<Game> {

@@ -110,20 +110,36 @@
             </mat-list-item>
         </mat-list>
     </div>
+
+    <div class="gameOtherVersionsContainer" *ngIf="gameAction !== 'requestGame'">
+        <div class="gameOtherVersionsTitleContainer" fxLayoutAlign="space-between center">
+            <div class="gameOtherVersionsTitle">Otras Versiones</div>
+            <button mat-icon-button (click)="openDialog(addOtherDialog, 'other_versions')"><mat-icon>add</mat-icon></button>
+        </div>
+        <mat-list class="gameOtherVersionsList">
+            <mat-list-item *ngFor="let version of gameForm.get('other_versions').value">
+                <img matListAvatar [src]="version.image ? version.image : 'assets/img/no_image.jpg'" [matTooltip]="version.game_code">
+                <p matLine>{{version.name}}</p>
+                <button mat-icon-button (click)="removeFromOtherList(version, 'other_versions')">
+                    <mat-icon>clear</mat-icon>
+                </button>
+            </mat-list-item>
+        </mat-list>
+    </div>
     <button mat-raised-button color="primary" (click)="submitGame()" [disabled]="gameForm.formIsInvalid() || loading.isLoading" fxFlex.xs>
         {{gameData.game_code ? 'Guardar' : 'Añadir'}} Juego
     </button>
 </div>
 
 <ng-template #addOtherDialog>
-    <h1 mat-dialog-title>Añadir {{addOtherAction == 'other_regions' ? 'región' : 'plataforma'}} relacionada al juego</h1>
+    <h1 mat-dialog-title>Añadir {{addOtherAction}} relacionada al juego</h1>
 
     <div mat-dialog-content class="addOtherDialogContent">
         <mat-form-field class="searchInput" appearance="outline">
             <input #textFilter matInput (keyup.enter)="filterGameList(textFilter.value)">
         </mat-form-field>
 
-        <ng-container *ngIf="addOtherAction === 'other_regions'; else otherElse">
+        <div *ngIf="addOtherAction === 'other_regions'">
             <mat-list>
                 <mat-list-item *ngFor="let game of addOtherGameList">
                     <img matListAvatar class="{{game.region}} mat-list-avatar" [src]="gameMeth.getRegionImage(game.region)" [matTooltip]="game.region">
@@ -134,9 +150,9 @@
                     </button>
                 </mat-list-item>
             </mat-list>
-        </ng-container>
+        </div>
 
-        <ng-template #otherElse>
+        <div *ngIf="addOtherAction === 'other_platforms'">
             <mat-list>
                 <mat-list-item *ngFor="let game of addOtherGameList">
                     <img matListAvatar class="mat-list-avatar" [src]="gameMeth.getPlatformImage(game.platform)" [matTooltip]="game.platform">
@@ -147,7 +163,20 @@
                     </button>
                 </mat-list-item>
             </mat-list>
-        </ng-template>
+        </div>
+
+        <div *ngIf="addOtherAction === 'other_versions'">
+            <mat-list>
+                <mat-list-item *ngFor="let game of addOtherGameList">
+                    <img matListAvatar class="mat-list-avatar" [src]="game.image ? game.image : 'assets/img/no_image.jpg'" [matTooltip]="game.game_code">
+                    <p matLine>{{game.name}}</p>
+                    <p matLine class="subText">{{game.platform}}</p>
+                    <button mat-icon-button (click)="addToOtherList(game)">
+                        <mat-icon>add</mat-icon>
+                    </button>
+                </mat-list-item>
+            </mat-list>
+        </div>
     </div>
 
     <div mat-dialog-actions>

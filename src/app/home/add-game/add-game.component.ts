@@ -43,7 +43,7 @@ export class AddGameComponent {
       this.createForm();
 
       if (this.router.url.includes('add') || this.router.url.includes('edit') || this.router.url.includes('pending')) {
-        if (this.router.url.includes('edit')) { this.gameAction = 'editGame'; }
+        if (this.router.url.includes('edit')) { this.gameAction = 'editGame'; this.refreshVerionImages(); }
         if (this.router.url.includes('add')) { this.gameAction = 'createGame'; }
         if (this.router.url.includes('pending')) { this.gameAction = 'pendingGame'; }
         this.gameForm.formGroup.get('name').setValidators([]);
@@ -58,6 +58,7 @@ export class AddGameComponent {
       if (routeData.gameData) { this.gameData = routeData.gameData; } else { this.gameData = new Game(); }
       
       this.gameForm.patchValue(this.gameData);
+      if (this.gameAction === 'editGame') { this.refreshVerionImages(); }
       this.gameBoxart.url = this.gameData.image;
     });
   }
@@ -76,7 +77,15 @@ export class AddGameComponent {
       'barcode': new FormControl({value: '', disabled: false}, [Validators.required]),
       'other_platforms': new FormControl({value: [], disabled: false}),
       'other_regions': new FormControl({value: [], disabled: false}),
+      'other_versions': new FormControl({value: [], disabled: false}),
     }), this.validationMessages);
+  }
+
+  private async refreshVerionImages() {
+    for (const version of this.gameForm.get('other_versions').value) {
+      let image = await this.gameService.getGameImageByGameCode(version.game_code);
+      version.image = image;
+    }
   }
 
   selectBoxart(event: any) {
@@ -155,7 +164,9 @@ export class AddGameComponent {
 
   filterGameList(textFilter: string) {
     this.addOtherGameList = [];
+    console.log("1");
     this.gameService.getAllGames().then(response => {
+      console.log("response", response);
       if (textFilter.trim().length > 1) {
         for (const game of response) {
           if (game.name.toLowerCase().includes(textFilter.toLowerCase()) && game.game_code !== this.gameData.game_code) {
@@ -163,14 +174,17 @@ export class AddGameComponent {
           }
         }
       } else { this.addOtherGameList = response; }
+      console.log("addOtherGameList", this.addOtherGameList);
     }).catch(err => console.error(err));
   }
 
   addToOtherList(game: Game) {
-    let otherList: {game_code: string, region?: string, platform?: string}[] = this.gameForm.get(this.addOtherAction).value;
+    let otherList: {game_code: string, region?: string, platform?: string, name?: string, image?: string}[] = this.gameForm.get(this.addOtherAction).value;
     if(this.addOtherAction === 'other_regions') {
       otherList.push({game_code: game.game_code, region: game.region});
-    } else { otherList.push({game_code: game.game_code, platform: game.platform}); }
+    } else if (this.addOtherAction === 'other_platforms') {
+      otherList.push({game_code: game.game_code, platform: game.platform});
+    } else { otherList.push({game_code: game.game_code, name: game.name, image: game.image}); }
   }
 
   removeFromOtherList(element, acction: string) {

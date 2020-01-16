@@ -14,6 +14,18 @@
             </mat-chip-list>
         </div>
 
+        <div class="gameDataSection gameDataVersion" *ngIf="gameData.other_versions && gameData.other_versions.length">
+            <div class="gameDataSectionTitle">Otras Versiones</div>
+            <div class="gameDataVersions" fxLayout="row" fxLayoutAlign=" center">
+                <img
+                    [class]="otherVersion.name"
+                    [src]="otherVersion.image"
+                    *ngFor="let otherVersion of gameData.other_versions"
+                    [matTooltip]="otherVersion.name"
+                    [routerLink]="['/', otherVersion.game_code]">
+            </div>
+        </div>
+
         <div class="gameDataSection gameDataPlatform">
             <div class="gameDataSectionTitle">Plataforma / Otras Plataformas</div>
             <div class="gameDataPlatforms" fxLayout="row wrap" fxLayoutAlign=" center">

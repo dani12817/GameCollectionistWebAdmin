@@ -7,6 +7,7 @@ export class Game {
   name: string;
   namecode: string;
   original_name: string;
+  other_versions: {name: string, game_code: string, image?: string}[];
   other_platforms: {platform: string, game_code: string}[];
   other_regions: {region: string, game_code: string}[];
   platform: string;

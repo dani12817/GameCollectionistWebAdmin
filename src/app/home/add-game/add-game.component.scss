@@ -37,12 +37,12 @@
         margin-bottom: 16px;
     }
 
-    .gameOtherPlatformsTitle, .gameOtherRegionsTitle {
+    .gameOtherPlatformsTitle, .gameOtherRegionsTitle, .gameOtherVersionsTitle {
         font-weight: 600;
         font-size: 24px;
     }
 
-    .gameOtherPlatformsContainer, .gameOtherRegionsContainer {
+    .gameOtherPlatformsContainer, .gameOtherRegionsContainer, .gameOtherVersionsContainer {
         margin-bottom: 16px;
 
         /deep/ .mat-list-avatar {
@@ -57,7 +57,7 @@
         }
     }
 
-    .gameOtherRegionsContainer {
+    .gameOtherRegionsContainer, .gameOtherVersionsContainer {
         /deep/ .mat-list-avatar {
             width: 48px !important;
         }

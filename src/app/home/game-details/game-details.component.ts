@@ -7,6 +7,7 @@ import { Game } from '../../models/game';
 import { UserService } from '../../providers/user.service';
 import { AuthService } from '../../providers/auth.service';
 import { LoadingService } from '../../providers/loading.service';
+import { GameService } from '../../providers/game.service';
 
 import { GameMethods } from '../../shared/game-methods';
 import { currencies, userLibraries } from '../../shared/constant';
@@ -23,12 +24,12 @@ export class GameDetailsComponent {
   userLibraries = userLibraries; currencies = currencies;
 
   constructor(private route: ActivatedRoute, private router: Router, private userService: UserService, private snackbar: MatSnackBar, public authService: AuthService,
-  private dialog: MatDialog, public loading: LoadingService) {
+  private dialog: MatDialog, public loading: LoadingService, private gameService: GameService) {
     this.route.data.subscribe((routeData: {gameData: Game}) => {
       this.gameData = routeData.gameData;
       if (this.gameData === null || this.gameData === undefined) { this.router.navigate(['/']); }
       console.log("this.gameData", this.gameData.name);
-      this.getGameOnLibrary();
+      this.getGameOnLibrary(); this.refreshVerionImages();
     });
   }  
 
@@ -47,6 +48,13 @@ export class GameDetailsComponent {
       if (!this.gameData.userGame) { this.gameData.userGame = {type: 'null'} }
       this.initFrom();
     }).catch(err => console.error(err));
+  }
+
+  private async refreshVerionImages() {
+    for (const version of this.gameData.other_versions) {
+      let image = await this.gameService.getGameImageByGameCode(version.game_code);
+      version.image = image;
+    }
   }
 
   addGameToLibrary(type: string) {
