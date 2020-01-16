@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnChanges } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
 
 import { UserService } from '../../providers/user.service';
@@ -15,7 +15,7 @@ import { UserGame } from '../../models/user';
   templateUrl: './game-library.component.html',
   styleUrls: ['./game-library.component.scss']
 })
-export class GameLibraryComponent implements OnInit {
+export class GameLibraryComponent implements OnChanges {
   @Input() userLibrary: UserGame[];
   @Input() otherUser: boolean;
   userGamesLibrary = {}; gameMeth = GameMethods; userLibraries = userLibraries;
@@ -24,7 +24,7 @@ export class GameLibraryComponent implements OnInit {
 
   constructor(private authService: AuthService, private snackbar: MatSnackBar) { }
 
-  ngOnInit(): void {
+  ngOnChanges(): void {
     console.log("userLibrary", this.userLibrary);
     if (!this.otherUser) { this.userLibrary =  this.authService.userLogged.games}
     this.initializeLibrary();
@@ -34,12 +34,14 @@ export class GameLibraryComponent implements OnInit {
     this.userGamesLibrary = {};
     for (const game of this.userLibrary) {
       if (game.type === this.selectLibrary) {
-        await game.reference.get().then(res => {
-          let gameData = res.data();
-          if (this.userGamesLibrary[gameData.platform] !== undefined) {
-            this.userGamesLibrary[gameData.platform].push(gameData);
-          } else { this.userGamesLibrary[gameData.platform] = [gameData]; }
-        });
+        try {
+          await game.reference.get().then(res => {
+            let gameData = res.data();
+            if (this.userGamesLibrary[gameData.platform] !== undefined) {
+              this.userGamesLibrary[gameData.platform].push(gameData);
+            } else { this.userGamesLibrary[gameData.platform] = [gameData]; }
+          });
+        } catch (err) { console.log("Not found", game.gamecode); }
       }
     }
     console.log("userGamesLibrary", this.userGamesLibrary);

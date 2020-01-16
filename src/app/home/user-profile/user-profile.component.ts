@@ -10,12 +10,13 @@ import { User } from '../../models/user';
   styleUrls: ['./user-profile.component.scss']
 })
 export class UserProfileComponent {
-  userData: User; userFriends: User[];
+  userData: User; userFriends: User[]; tabSelected: number = 0;
 
   constructor(private route: ActivatedRoute, private router: Router, private userService: UserService) {
     this.route.data.subscribe((routeData: {userData: User}) => {
       this.userData = routeData.userData;
       if (this.userData === null || this.userData === undefined) { this.router.navigate(['/']); } else { this.initializeFriends(); }
+      this.tabSelected = 0;
       console.log("userData", this.userData.name);
     });
   }

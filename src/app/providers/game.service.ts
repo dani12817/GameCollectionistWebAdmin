@@ -14,21 +14,21 @@ export class GameService {
 
   getAllGames(pending?: boolean): Promise<Game[]> {
     return new Promise<Game[]>((resolve, reject) => {
-      let sub = this.afs.collection<Game>(pending ? 'pendingGames' : 'games').valueChanges().subscribe(response => {
+      let sub = this.afs.collection<Game>(pending ? 'pendingGames' : 'games', ref => ref.orderBy('platform')).valueChanges().subscribe(response => {
         sub.unsubscribe();
         resolve(response);
       }, err => reject(err));
     });
   }
 
-  getAllPlatformGames(platform: string, pending?: boolean): Promise<Game[]> {
+  /*getAllPlatformGames(platform: string, pending?: boolean): Promise<Game[]> {
     return new Promise<Game[]>((resolve, reject) => {
-      let sub = this.afs.collection<Game>(pending ? 'pendingGames' : 'games', ref => ref.where("platform", "==", platform)).valueChanges().subscribe(response => {
+      let sub = this.afs.collection<Game>(pending ? 'pendingGames' : 'games', ref => ref.where("platform", "==", platform).orderBy('platform')).valueChanges().subscribe(response => {
         sub.unsubscribe();
         resolve(response);
       }, err => reject(err));
     });
-  }
+  }*/
 
   getGameByGameCode(game_code: string, pending?: boolean): Promise<Game> {
     return new Promise<any>((resolve, reject) => {

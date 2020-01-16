@@ -88,7 +88,7 @@
             <mat-list-item *ngFor="let platform of gameForm.get('other_platforms').value">
                 <img matListAvatar [src]="gameMeth.getPlatformImage(platform.platform)" [matTooltip]="platform.platform">
                 <p matLine>{{platform.game_code}}</p>
-                <button mat-icon-button>
+                <button mat-icon-button (click)="removeFromOtherList(platform, 'other_platforms')">
                     <mat-icon>clear</mat-icon>
                 </button>
             </mat-list-item>

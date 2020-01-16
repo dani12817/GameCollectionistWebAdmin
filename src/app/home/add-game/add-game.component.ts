@@ -122,7 +122,7 @@ export class AddGameComponent {
           console.log("this.gameAction", this.gameAction);
           await this.gameService.createGame(this.gameForm.getValue(), this.gameBoxart.file, (this.gameAction === 'requestGame'));
           this.snackbar.open('Petición de Juego enviada');
-          this.router.navigate(['/']);
+          if (this.gameAction == 'requestGame') { this.router.navigate(['/']); }
         }
         this.loading.isLoading = false;
       }
@@ -158,7 +158,7 @@ export class AddGameComponent {
     this.gameService.getAllGames().then(response => {
       if (textFilter.trim().length > 1) {
         for (const game of response) {
-          if (game.name.toLowerCase().includes(textFilter) && game.name !== this.gameData.name) {
+          if (game.name.toLowerCase().includes(textFilter.toLowerCase()) && game.game_code !== this.gameData.game_code) {
             this.addOtherGameList.push(game);
           }
         }
