@@ -2,7 +2,7 @@
     <div class="boxartContainer" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center end">
         <div class="gameBoxartContainer">
             <img [src]="gameBoxart.url ? gameBoxart.url : 'assets/img/no_image.jpg'">
-            <button mat-icon-button color="warn" class="boxartDeleteButton" (click)="removeNewBoxart()" *ngIf="gameBoxart.file"><mat-icon>redo</mat-icon></button>
+            <button mat-icon-button color="warn" class="boxartDeleteButton" (click)="removeNewBoxart()" *ngIf="gameBoxart.file && gameAction == ''editGame"><mat-icon>redo</mat-icon></button>
         </div>
         <input class="boxartInput" type="file" (change)="selectBoxart($event)" />
     </div>
@@ -104,13 +104,15 @@
             <mat-list-item *ngFor="let region of gameForm.get('other_regions').value">
                 <img matListAvatar [src]="gameMeth.getRegionImage(region.region)" [matTooltip]="region.region">
                 <p matLine>{{region.game_code}}</p>
-                <button mat-icon-button>
+                <button mat-icon-button (click)="removeFromOtherList(region, 'other_regions')">
                     <mat-icon>clear</mat-icon>
                 </button>
             </mat-list-item>
         </mat-list>
     </div>
-    <button mat-raised-button color="primary" (click)="submitGame()" [disabled]="gameForm.formIsInvalid()" fxFlex.xs>{{gameData.game_code ? 'Guardar' : 'Añadir'}} Juego</button>
+    <button mat-raised-button color="primary" (click)="submitGame()" [disabled]="gameForm.formIsInvalid() || loading.isLoading" fxFlex.xs>
+        {{gameData.game_code ? 'Guardar' : 'Añadir'}} Juego
+    </button>
 </div>
 
 <ng-template #addOtherDialog>

@@ -5,11 +5,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { Game } from '../../models/game';
 import { GameService } from '../../providers/game.service';
+import { LoadingService } from '../../providers/loading.service';
 
 import { gameRegions, platforms, genres } from '../../shared/constant';
 import { noWhitespaceValidator } from '../../shared/validators/form-validators';
 import { GameMethods } from '../../shared/game-methods';
 import { FormClass } from '../../shared/form-class';
+import { element } from 'protractor';
 
 @Component({
   selector: 'app-add-game',
@@ -35,11 +37,12 @@ export class AddGameComponent {
     barcode: {required: 'El código de barras es obligatorio.'},
   };
 
-  constructor(private route: ActivatedRoute, private gameService: GameService, private router: Router, private snackbar: MatSnackBar, private dialog: MatDialog) {
+  constructor(private route: ActivatedRoute, private gameService: GameService, private router: Router, private snackbar: MatSnackBar, private dialog: MatDialog,
+  public loading: LoadingService) {
     this.route.data.subscribe((routeData: {gameData: Game}) => {
       this.createForm();
 
-      if (this.router.url.includes('create') || this.router.url.includes('edit') || this.router.url.includes('pending')) {
+      if (this.router.url.includes('add') || this.router.url.includes('edit') || this.router.url.includes('pending')) {
         if (this.router.url.includes('edit')) { this.gameAction = 'editGame'; }
         if (this.router.url.includes('add')) { this.gameAction = 'createGame'; }
         if (this.router.url.includes('pending')) { this.gameAction = 'pendingGame'; }
@@ -61,7 +64,6 @@ export class AddGameComponent {
 
   createForm() {
     this.gameForm = new FormClass(new FormGroup({
-      'test': new FormControl({value: null, disabled: false}),
       'collectors_edition': new FormControl({value: false, disabled: false}),
       'name': new FormControl({value: '', disabled: false}, [Validators.required]),
       'original_name': new FormControl({value: '', disabled: false}),
@@ -84,7 +86,7 @@ export class AddGameComponent {
       this.reader.onload = (_event) => { 
         this.gameBoxart.url = this.reader.result; 
       }
-      console.log("gameBoxart", this.gameBoxart);
+      console.log("gameBoxart", this.gameBoxart.file);
     }
   }
 
@@ -94,10 +96,12 @@ export class AddGameComponent {
   }
 
   async submitGame() {
+    this.loading.isLoading = true;
     try {
       if (this.gameData.game_code) {
         if (this.gameAction === 'pendingGame') {
           await this.deleteUpdateGame(true, true);
+          this.loading.isLoading = false;
           console.log("deleteUpdateGame finished");
         } else if (this.gameData.game_code !== this.gameForm.get('game_code').value) {
           let gameExists = await this.gameService.gameExist(this.gameForm.get('game_code').value);
@@ -106,6 +110,7 @@ export class AddGameComponent {
           } else {
             await this.deleteUpdateGame(false, true);
           }
+          this.loading.isLoading = false;
         } else {
           this.updateGame();
         }
@@ -114,12 +119,14 @@ export class AddGameComponent {
         if(gameExists.exist) {
           this.snackbar.open(gameExists.error);
         } else {
+          console.log("this.gameAction", this.gameAction);
           await this.gameService.createGame(this.gameForm.getValue(), this.gameBoxart.file, (this.gameAction === 'requestGame'));
           this.snackbar.open('Petición de Juego enviada');
           this.router.navigate(['/']);
         }
+        this.loading.isLoading = false;
       }
-    } catch (err) { console.error(err); }
+    } catch (err) { console.error(err); this.loading.isLoading = false; }
   }
 
   private updateGame() {
@@ -128,6 +135,7 @@ export class AddGameComponent {
       this.snackbar.open("Juego Actualizado");
       console.log('updateGame', response);
       this.router.navigate(['/edit-game/', response.game_code]);
+      this.loading.isLoading = false;
     }).catch(err => console.error(err));
   }
 
@@ -163,5 +171,10 @@ export class AddGameComponent {
     if(this.addOtherAction === 'other_regions') {
       otherList.push({game_code: game.game_code, region: game.region});
     } else { otherList.push({game_code: game.game_code, platform: game.platform}); }
+  }
+
+  removeFromOtherList(element, acction: string) {
+    let otherList: {game_code: string, region?: string, platform?: string}[] = this.gameForm.get(acction).value;
+    otherList.splice(otherList.indexOf(element), 1);
   }
 }

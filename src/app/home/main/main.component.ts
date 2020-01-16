@@ -5,6 +5,7 @@ import { SearchDialogComponent } from '../../shared/dialogs/search-dialog/search
 
 import { GameService } from '../../providers/game.service';
 import { UserService } from '../../providers/user.service';
+import { LoadingService } from '../../providers/loading.service';
 
 import { Game } from '../../models/game';
 import { SearchForm } from '../../models/search';
@@ -22,14 +23,16 @@ export class MainComponent {
   gamesFiltered: Game[]; userFiltered: User[];
   searchType: string; filters: SearchForm = {};
 
-  constructor(private gameService: GameService, private userService: UserService, private dialog: MatDialog) {
+  constructor(private gameService: GameService, private userService: UserService, private dialog: MatDialog, public loading: LoadingService) {
     this.initGameList();
     this.filterUser({});
   }
 
   initGameList() {
+    this.loading.isLoading = true;
     this.gameService.getAllGames().then(response => {
       this.games = response;
+      this.loading.isLoading = false;
     });
   }
 
@@ -42,14 +45,14 @@ export class MainComponent {
     if (this.searchType) { this.filters.type = this.searchType; }
     let searchDialog = this.dialog.open(SearchDialogComponent, {panelClass: 'mat-dialog-toolbar', data: this.filters});
     let sub = searchDialog.beforeClose().subscribe((response: SearchForm) => {
-      sub.unsubscribe();
-        this.searchType = response.type; delete response.type;
-        this.filters = response;
-        if (this.searchType == 'user') {
-          this.filterUser(response);
-        } else {
-          this.filterGame(response);
-        }
+      sub.unsubscribe(); this.loading.isLoading = true;
+      this.searchType = response.type; delete response.type;
+      this.filters = response;
+      if (this.searchType == 'user') {
+        this.filterUser(response);
+      } else {
+        this.filterGame(response);
+      }
     });
   }
 
@@ -57,6 +60,7 @@ export class MainComponent {
     this.userFiltered = [];
     this.userService.searchUser(filters.nickname).then(response => {
       this.userFiltered = response;
+      this.loading.isLoading = false;
     }).catch(err => console.error(err))
   }
 
@@ -69,6 +73,7 @@ export class MainComponent {
         }
       }
     }
+    this.loading.isLoading = false;
   }
 
   private applyFilter(game: Game, filters: SearchForm): boolean {

@@ -26,6 +26,6 @@
             <mat-error fxShow="userDataForm.hasError('email')">{{ userDataForm.hasError('email') }}</mat-error>
         </mat-form-field>
         
-        <button mat-raised-button color="primary" (click)="submitData()" [disabled]="userDataForm.formIsInvalid()">Guardar cambios</button>
+        <button mat-raised-button color="primary" (click)="submitData()" [disabled]="userDataForm.formIsInvalid() || loading.isLoading">Guardar cambios</button>
     </form>
 </div>

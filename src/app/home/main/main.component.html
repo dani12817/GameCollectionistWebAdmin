@@ -9,5 +9,6 @@
         <div clas="gameCardList" fxLayout="row wrap" fxLayoutAlign="space-evenly center">
             <img class="gameCard" [ngClass]="{'collectorsEdition': game.collectors_edition}" *ngFor="let game of getGameList()" [src]="gameMeth.getGameImage(game)" [alt]="game.name" [matTooltip]="game.name" [routerLink]="['/', game.game_code]">
         </div>
+        <button class="refreshButton" mat-icon-button (click)="initGameList()" [disabled]="loading.isLoading"><mat-icon>refresh</mat-icon></button>
     </ng-template>
 </div>

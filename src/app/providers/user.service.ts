@@ -4,6 +4,7 @@ import { AngularFireStorage } from '@angular/fire/storage';
 
 import { User, UserGame } from '../models/user';
 import { AuthService } from './auth.service';
+import { LoadingService } from './loading.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,7 @@ import { AuthService } from './auth.service';
 export class UserService {
   private usersGameLibrary = this.afs.collection<User>("usersGameLibrary");
 
-  constructor(private authService: AuthService, private storage: AngularFireStorage, private afs: AngularFirestore) { }
+  constructor(private authService: AuthService, private storage: AngularFireStorage, private afs: AngularFirestore, public loading: LoadingService) { }
 
   getUser(nickname: string, loggedUser?: boolean): Promise<User> {
     return new Promise<User>((resolve, reject) => {
@@ -92,6 +93,7 @@ export class UserService {
     return new Promise<User>((resolve, reject) => {
       console.log("Usuario Actualizado");
       this.usersGameLibrary.doc(userData.uid).set(userData);
+      this.loading.isLoading = false;
       resolve(userData);
     });
   }

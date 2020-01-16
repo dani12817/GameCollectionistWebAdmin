@@ -1,3 +1,9 @@
+mat-progress-bar {
+    z-index: 100;
+    position: fixed;
+    top: 0;
+}
+
 @media screen and (min-width: 769px) {
     /deep/ .mat-dialog-toolbar {
         width: 480px;

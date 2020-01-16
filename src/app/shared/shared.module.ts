@@ -8,7 +8,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { MatInputModule, MatTooltipModule, MatChipsModule, MatSelectModule, MatListModule, MatSidenavModule, MatFormFieldModule, MatToolbarModule,
 MatIconModule, MatButtonModule, MatDatepickerModule, MatNativeDateModule, MatSnackBarModule, MAT_SNACK_BAR_DEFAULT_OPTIONS, MatDividerModule,
-MatRadioModule, MatTabsModule, MatCheckboxModule } from '@angular/material';
+MatRadioModule, MatTabsModule, MatCheckboxModule, MatProgressBarModule } from '@angular/material';
 
 
 import { MatDialogModule, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -53,6 +53,7 @@ registerLocaleData(localeEs);
     MatRadioModule,
     MatTabsModule,
     MatCheckboxModule,
+    MatProgressBarModule
   ],
   exports: [
     ReactiveFormsModule,
@@ -77,6 +78,7 @@ registerLocaleData(localeEs);
     MatRadioModule,
     MatTabsModule,
     MatCheckboxModule,
+    MatProgressBarModule
   ],
   providers: [
     {provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: {duration: 2500}},

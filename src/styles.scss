@@ -57,6 +57,14 @@ img.NTSC-J{
     color:white !important;
 }
 
+.refreshButton {
+    position: fixed !important;
+    top: 12px;
+    right: 116px;
+    z-index: 10;
+    color:white !important;
+}
+
 .userCard {
     box-shadow: 0 2px 1px -1px rgba(0,0,0,.2),0 1px 1px 0 rgba(0,0,0,.14),0 1px 3px 0 rgba(0,0,0,.12);
     padding: 16px;
@@ -109,5 +117,10 @@ img.NTSC-J{
     .searchButton {
         top: 8px;
         right: 52px;
+    }
+
+    .refreshButton {
+        top: 8px;
+        right: 106px;
     }
 }

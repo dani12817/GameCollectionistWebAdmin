@@ -43,7 +43,7 @@
     <div class="userGameTypeSection" *ngIf="authService.userLogged && gameData.userGame">
         <mat-form-field appearance="outline">
             <mat-label>Poner en mi Biblioteca de Juegos</mat-label>
-            <mat-select placeholder="Géneros" [(ngModel)]="gameData.userGame.type" (selectionChange)="addGameToLibrary(gameData.userGame.type)">
+            <mat-select placeholder="Géneros" [(ngModel)]="gameData.userGame.type" (selectionChange)="addGameToLibrary(gameData.userGame.type)" [disable]="loading.isLoading">
                 <mat-option [value]="'null'">Ninguna</mat-option>
                 <mat-option *ngFor="let userLibrary of objectKeys(userLibraries)" [value]="userLibrary">
                     {{ userLibraries[userLibrary] }}
