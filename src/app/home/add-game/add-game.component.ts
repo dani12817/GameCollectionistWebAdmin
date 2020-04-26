@@ -34,7 +34,6 @@ export class AddGameComponent {
     genres: {required: 'Se tiene que seleccionar al menos un género.'},
     region: {required: 'La región es obligatoria.'},
     platform: {required: 'La plataforma es obligatoria.'},
-    barcode: {required: 'El código de barras es obligatorio.'},
   };
 
   constructor(private route: ActivatedRoute, private gameService: GameService, private router: Router, private snackbar: MatSnackBar, private dialog: MatDialog,
@@ -74,7 +73,7 @@ export class AddGameComponent {
       'region': new FormControl({value: '', disabled: false}, [Validators.required]),
       'platform': new FormControl({value: '', disabled: false}, [Validators.required]),
       'namecode': new FormControl({value: '', disabled: false}),
-      'barcode': new FormControl({value: '', disabled: false}, [Validators.required]),
+      'barcode': new FormControl({value: '', disabled: false}),
       'other_platforms': new FormControl({value: [], disabled: false}),
       'other_regions': new FormControl({value: [], disabled: false}),
       'other_versions': new FormControl({value: [], disabled: false}),
