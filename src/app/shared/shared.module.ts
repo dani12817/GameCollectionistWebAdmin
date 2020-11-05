@@ -26,6 +26,9 @@ import { UserProfileComponent } from '../home/user-profile/user-profile.componen
 import { SearchDialogComponent } from './dialogs/search-dialog/search-dialog.component';
 import { UserCardComponent } from './user-card/user-card.component';
 
+import { FocusMeDirective } from './focus.directive';
+
+
 registerLocaleData(localeEs);
 
 @NgModule({
@@ -94,6 +97,7 @@ registerLocaleData(localeEs);
     MainComponent,
     SearchDialogComponent,
     UserCardComponent,
+    FocusMeDirective
   ],
   entryComponents: [SearchDialogComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]

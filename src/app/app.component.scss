@@ -7,13 +7,12 @@ mat-progress-bar {
 @media screen and (min-width: 769px) {
     /deep/ .mat-dialog-toolbar {
         width: 480px;
-        height: 538px;
+        min-height: 538px;
         max-width: 90vw !important;
         max-height: 90vh !important;
-    
+
         mat-dialog-container {
             padding: 0px !important;
-
             .dialog-toolbar-content {
                 padding: 16px;
             }
@@ -27,10 +26,9 @@ mat-progress-bar {
         max-width: 100vw !important;
         height: 100vh;
         max-height: 100vh !important;
-    
+        
         mat-dialog-container {
             padding: 0px !important;
-
             .dialog-toolbar-content {
                 padding: 16px;
             }

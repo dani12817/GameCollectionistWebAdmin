@@ -23,15 +23,17 @@ export class SidenavComponent {
   constructor(private route: ActivatedRoute) {
     this.route.data.subscribe((routeData: {authUser: User}) => {
       this.authUser = routeData.authUser;
-      this.drawerLinks.push(
-        {icon: 'supervised_user_circle', route: [`/user/${this.authUser.nickname}`], title: 'Mi Perfil'},
-      );
       
-      if (this.authUser && this.authUser.admin) {
+      if (this.authUser) {
         this.drawerLinks.push(
-          {icon: 'videogame_asset', route: ['/add-game'], title: 'Añadir Juego'},
-          {icon: 'cloud_download', route: ['/pending-games'], title: 'Juegos Pendientes'}
+          {icon: 'supervised_user_circle', route: [`/user/${this.authUser.nickname}`], title: 'Mi Perfil'},
         );
+        if (this.authUser.admin) {
+          this.drawerLinks.push(
+            {icon: 'videogame_asset', route: ['/add-game'], title: 'Añadir Juego'},
+            {icon: 'cloud_download', route: ['/pending-games'], title: 'Juegos Pendientes'}
+          );
+        }
       }
     });
   }

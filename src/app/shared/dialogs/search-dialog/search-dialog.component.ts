@@ -2,6 +2,8 @@ import { Component, Inject } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 
+import { FilterService } from '../../../providers/filter.service';
+
 import { FormClass } from '../../form-class';
 import { platforms, gameRegions, genres } from '../../constant';
 import { GameMethods } from '../../game-methods';
@@ -17,9 +19,9 @@ export class SearchDialogComponent {
   regions: string[] = gameRegions;
   genres: string[] = genres;
 
-  constructor(private dialogRef: MatDialogRef<SearchDialogComponent>, @Inject(MAT_DIALOG_DATA) private data: any) {
+  constructor(private dialogRef: MatDialogRef<SearchDialogComponent>, @Inject(MAT_DIALOG_DATA) private data: any, private filterService: FilterService) {
     this.initForm();
-    console.log("data", data);
+    //console.log("filters", this.filterService.filters);
   }
 
   initForm() {
@@ -33,7 +35,7 @@ export class SearchDialogComponent {
       'region': new FormControl({value: null, disabled: false}),
       'release_date': new FormControl({value: null, disabled: false}),
     }));
-    if (this.data) { this.searchForm.patchValue(this.data); }
+    if (this.filterService.filters) { this.searchForm.patchValue(this.filterService.filters); }
   }
 
   resetForm() {
@@ -43,6 +45,8 @@ export class SearchDialogComponent {
   }
 
   submitSearch() {
-    this.dialogRef.close(this.searchForm.getValueNotNull());
+    this.filterService.filters = this.searchForm.getValueNotNull();
+    //console.log("submitSearch", this.filterService.filters);
+    this.dialogRef.close();
   }
 }

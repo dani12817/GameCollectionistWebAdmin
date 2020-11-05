@@ -51,9 +51,11 @@ export class GameDetailsComponent {
   }
 
   private async refreshVerionImages() {
-    for (const version of this.gameData.other_versions) {
-      let image = await this.gameService.getGameImageByGameCode(version.game_code);
-      version.image = image;
+    if (this.gameData.other_versions) {
+      for (const version of this.gameData.other_versions) {
+        let image = await this.gameService.getGameImageByGameCode(version.game_code);
+        version.image = image;
+      }
     }
   }
 

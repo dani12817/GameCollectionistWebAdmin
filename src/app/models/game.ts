@@ -16,6 +16,7 @@ export class Game {
   release_date_full: string;
   game_on_library?: boolean;
   userGame: UserGame;
+  collectors_edition: boolean;
 
   constructor(gameData?) {
     Object.assign(this, gameData)

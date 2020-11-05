@@ -6,6 +6,7 @@ import { SearchDialogComponent } from '../../shared/dialogs/search-dialog/search
 import { GameService } from '../../providers/game.service';
 import { UserService } from '../../providers/user.service';
 import { LoadingService } from '../../providers/loading.service';
+import { FilterService } from '../../providers/filter.service';
 
 import { Game } from '../../models/game';
 import { SearchForm } from '../../models/search';
@@ -21,54 +22,54 @@ import { GameMethods } from '../../shared/game-methods';
 export class MainComponent {
   games: Game[]; gameMeth = GameMethods;
   gamesFiltered: Game[]; userFiltered: User[];
-  searchType: string; filters: SearchForm = {};
+  searchType: string;
 
-  constructor(private gameService: GameService, private userService: UserService, private dialog: MatDialog, public loading: LoadingService) {
+  constructor(private gameService: GameService, private userService: UserService, private dialog: MatDialog, public loading: LoadingService,
+  private filterService: FilterService) {
     this.initGameList();
-    this.filterUser({});
+    this.filterUser();
   }
 
   initGameList() {
     this.loading.isLoading = true;
     this.gameService.getAllGames().then(response => {
       this.games = response;
-      this.loading.isLoading = false;
+      this.filterGame();
     });
   }
 
   getGameList() {
-    return (Object.keys(this.filters).length > 0) ? this.gamesFiltered : this.games;
+    return (Object.keys(this.filterService.filters).length > 1) ? this.gamesFiltered : this.games;
   }
 
   openSearchDialog() {
-    console.log("filters", this.filters);
-    if (this.searchType) { this.filters.type = this.searchType; }
-    let searchDialog = this.dialog.open(SearchDialogComponent, {panelClass: 'mat-dialog-toolbar', data: this.filters});
-    let sub = searchDialog.beforeClose().subscribe((response: SearchForm) => {
+    if (this.searchType) { this.filterService.filters.type = this.searchType; }
+    let searchDialog = this.dialog.open(SearchDialogComponent, {panelClass: 'mat-dialog-toolbar', autoFocus: false});
+    let sub = searchDialog.beforeClosed().subscribe(() => {
       sub.unsubscribe(); this.loading.isLoading = true;
-      this.searchType = response.type; delete response.type;
-      this.filters = response;
+      this.searchType = this.filterService.filters.type;
+
       if (this.searchType == 'user') {
-        this.filterUser(response);
+        this.filterUser();
       } else {
-        this.filterGame(response);
+        this.filterGame();
       }
     });
   }
 
-  private filterUser(filters: SearchForm) {
+  private filterUser() {
     this.userFiltered = [];
-    this.userService.searchUser(filters.nickname).then(response => {
+    this.userService.searchUser(this.filterService.filters.nickname).then(response => {
       this.userFiltered = response;
       this.loading.isLoading = false;
     }).catch(err => console.error(err))
   }
 
-  private filterGame(filters: SearchForm) {
+  private filterGame() {
     this.gamesFiltered = [];
-    if (Object.keys(filters).length > 0) {
+    if (Object.keys(this.filterService.filters).length > 1) {
       for (const game of this.games) {
-        if (this.applyFilter(game, filters)) {
+        if (this.applyFilter(game, this.filterService.filters)) {
           this.gamesFiltered.push(game);
         }
       }

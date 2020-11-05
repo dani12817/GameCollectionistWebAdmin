@@ -38,7 +38,7 @@ export class FormClass {
   }
 
   /**
-   * Devuelte el 'value' del FormGroup.
+   * Devuelve el 'value' del FormGroup.
    */
   getValue() {
     return this.formGroup.value;
@@ -47,7 +47,7 @@ export class FormClass {
   getValueNotNull() {
     let formValue = {};
     for (const field of Object.keys(this.formGroup.value)) {
-      if (this.get(field).value) { formValue[field] = this.get(field).value }
+      if (this.get(field).value && this.get(field).value.length) { formValue[field] = this.get(field).value }
     }
     return formValue;
   }
