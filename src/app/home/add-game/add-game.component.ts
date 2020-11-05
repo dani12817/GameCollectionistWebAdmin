@@ -26,7 +26,7 @@ export class AddGameComponent {
   
   addOtherAction: string; addOtherGameList: Game[];
 
-  reader = new FileReader()
+  reader = new FileReader();
 
   validationMessages = {
     name: {required: 'El nombre es obligatorio.'},
@@ -88,12 +88,12 @@ export class AddGameComponent {
   }
 
   selectBoxart(event: any) {
-    if(event.target.files && event.target.files.length) {
+    if (event.target.files && event.target.files.length) {
       this.gameBoxart.file = event.target.files[0];
       this.reader.readAsDataURL(this.gameBoxart.file); 
       this.reader.onload = (_event) => { 
         this.gameBoxart.url = this.reader.result; 
-      }
+      };
       console.log("gameBoxart", this.gameBoxart.file);
     }
   }
@@ -124,13 +124,13 @@ export class AddGameComponent {
         }
       } else {
         let gameExists = await this.gameService.gameExist(this.gameForm.get('game_code').value);
-        if(gameExists.exist) {
+        if (gameExists.exist) {
           this.snackbar.open(gameExists.error);
         } else {
           console.log("this.gameAction", this.gameAction);
           await this.gameService.createGame(this.gameForm.getValue(), this.gameBoxart.file, (this.gameAction === 'requestGame'));
           this.snackbar.open('Petición de Juego enviada');
-          if (this.gameAction == 'requestGame') { this.router.navigate(['/']); }
+          if (this.gameAction === 'requestGame') { this.router.navigate(['/']); }
         }
         this.loading.isLoading = false;
       }
@@ -179,7 +179,7 @@ export class AddGameComponent {
 
   addToOtherList(game: Game) {
     let otherList: {game_code: string, region?: string, platform?: string, name?: string, image?: string}[] = this.gameForm.get(this.addOtherAction).value;
-    if(this.addOtherAction === 'other_regions') {
+    if (this.addOtherAction === 'other_regions') {
       otherList.push({game_code: game.game_code, region: game.region});
     } else if (this.addOtherAction === 'other_platforms') {
       otherList.push({game_code: game.game_code, platform: game.platform});

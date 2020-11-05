@@ -26,7 +26,7 @@ export class GameLibraryComponent implements OnChanges {
 
   ngOnChanges(): void {
     console.log("userLibrary", this.userLibrary);
-    if (!this.otherUser) { this.userLibrary =  this.authService.userLogged.games}
+    if (!this.otherUser) { this.userLibrary =  this.authService.userLogged.games; }
     this.initializeLibrary();
   }
 

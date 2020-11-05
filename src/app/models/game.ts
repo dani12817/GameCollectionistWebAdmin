@@ -19,7 +19,7 @@ export class Game {
   collectors_edition: boolean;
 
   constructor(gameData?) {
-    Object.assign(this, gameData)
+    Object.assign(this, gameData);
 
     if (gameData && gameData.release_date) {
       this.release_date = new Date(gameData.release_date.seconds * 1000);

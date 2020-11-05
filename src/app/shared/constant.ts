@@ -13,7 +13,7 @@ export let platforms: string[] = [
   "Dreamcast",
   "GameBoy",
   "GameBoy Advance",
-  "GameBoy COlor",
+  "GameBoy Color",
   "Master System",
   "Mega Drive",
   "Microsoft Windows",

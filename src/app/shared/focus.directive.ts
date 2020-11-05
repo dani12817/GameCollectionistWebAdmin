@@ -5,8 +5,8 @@ import { Directive, ElementRef } from '@angular/core';
 })
 export class FocusMeDirective {
     constructor(el: ElementRef) {
-      setTimeout(()=>{
+      setTimeout(() => {
         el.nativeElement.focus();
-      },500);
+      }, 500);
     }
 }

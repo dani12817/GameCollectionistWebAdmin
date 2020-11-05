@@ -16,7 +16,7 @@ import { FormClass } from '../../shared/form-class';
 export class UserDataComponent {
   userData: User; userDataForm: FormClass;
   userAvatar: {file: File, url: string | ArrayBuffer} = {file: null, url: null};
-  reader = new FileReader()
+  reader = new FileReader();
 
   validationMessages = {
     name: {required: 'El nombre es obligatorio.'},
@@ -46,12 +46,12 @@ export class UserDataComponent {
   }
 
   selectAvatar(event: any) {
-    if(event.target.files && event.target.files.length) {
+    if (event.target.files && event.target.files.length) {
       this.userAvatar.file = event.target.files[0];
       this.reader.readAsDataURL(this.userAvatar.file); 
       this.reader.onload = (_event) => { 
         this.userAvatar.url = this.reader.result; 
-      }
+      };
     }
   }
 

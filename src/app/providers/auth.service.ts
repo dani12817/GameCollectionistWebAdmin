@@ -16,7 +16,7 @@ export class AuthService {
   getLoggedInUser(): Promise<User> {
     return new Promise((resolve, reject) => {
       console.log("getLoggedInUser", this.userLogged);
-      if(this.userLogged) { resolve(this.userLogged); }
+      if (this.userLogged) { resolve(this.userLogged); }
       this.afAuth.auth.onAuthStateChanged(user => {
         if (user) {
           let sub = this.usersGameLibrary.doc(user.uid).valueChanges().subscribe((userLibrary: User) => {
@@ -67,7 +67,7 @@ export class AuthService {
     this.afAuth.auth.signOut();
   }
 
-  initializeUser(userData: firebase.auth.UserCredential): User{
+  initializeUser(userData: firebase.auth.UserCredential): User {
     let user = new User(userData);
     this.afs.collection<User[]>("usersGameLibrary").doc(userData.user.uid).set(Object.assign({}, user));
     return user;

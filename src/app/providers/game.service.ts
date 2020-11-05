@@ -14,8 +14,7 @@ export class GameService {
 
   getAllGames(pending?: boolean): Promise<Game[]> {
     return new Promise<Game[]>((resolve, reject) => {
-      let sub = this.afs.collection<Game>(pending ? 'pendingGames' : 'games', ref => ref.orderBy('platform')).valueChanges().subscribe(response => {
-        sub.unsubscribe();
+      this.afs.collection<Game>(pending ? 'pendingGames' : 'games', ref => ref.orderBy('platform')).valueChanges().subscribe(response => {
         resolve(response);
       }, err => reject(err));
     });
@@ -32,15 +31,14 @@ export class GameService {
 
   getGameByGameCode(game_code: string, pending?: boolean): Promise<Game> {
     return new Promise<any>((resolve, reject) => {
-      let sub = this.afs.collection<Game>(pending ? 'pendingGames' : 'games').doc<Game>(game_code).valueChanges().subscribe(response => {
-        sub.unsubscribe();
+      this.afs.collection<Game>(pending ? 'pendingGames' : 'games').doc<Game>(game_code).valueChanges().subscribe(response => {
         resolve(new Game(response));
       }, err => reject(err));
     });
   }
-  
+
   getGameImageByGameCode(game_code: string): Promise<string> {
-    return this.storage.storage.ref(`/games/${game_code}`).getDownloadURL()
+    return this.storage.storage.ref(`/games/${game_code}`).getDownloadURL();
   }    
 
   createGame(gameData: Game, boxart, pending: boolean): Promise<Game> {

@@ -21,7 +21,7 @@ export class SearchDialogComponent {
 
   constructor(private dialogRef: MatDialogRef<SearchDialogComponent>, @Inject(MAT_DIALOG_DATA) private data: any, private filterService: FilterService) {
     this.initForm();
-    //console.log("filters", this.filterService.filters);
+    // console.log("filters", this.filterService.filters);
   }
 
   initForm() {
@@ -39,14 +39,14 @@ export class SearchDialogComponent {
   }
 
   resetForm() {
-    let type = this.searchForm.get('type').value
+    let type = this.searchForm.get('type').value;
     this.searchForm.reset();
-    this.searchForm.patchValue({type: type})
+    this.searchForm.patchValue({type: type});
   }
 
   submitSearch() {
     this.filterService.filters = this.searchForm.getValueNotNull();
-    //console.log("submitSearch", this.filterService.filters);
+    // console.log("submitSearch", this.filterService.filters);
     this.dialogRef.close();
   }
 }

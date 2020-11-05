@@ -4,15 +4,19 @@
     "codelyzer"
   ],
   "rules": {
+    "align": false,
     "array-type": false,
     "arrow-parens": false,
     "deprecation": {
       "severity": "warn"
     },
+    "directive-selector": false,
+    "eofline": false,
     "import-blacklist": [
       true,
       "rxjs/Rx"
     ],
+    "indent": false,
     "interface-name": false,
     "max-classes-per-file": false,
     "max-line-length": [
@@ -46,16 +50,21 @@
       "ignore-params"
     ],
     "no-non-null-assertion": true,
-    "no-redundant-jsdoc": true,
+    "no-redundant-jsdoc": false,
+    "no-shadowed-variable": false,
     "no-switch-case-fall-through": true,
+    "no-trailing-whitespace": false,
     "no-use-before-declare": true,
+    "no-unused-expression": false,
     "no-var-requires": false,
     "object-literal-key-quotes": [
       false,
       "as-needed"
     ],
+    "object-literal-shorthand": false,
     "object-literal-sort-keys": false,
     "ordered-imports": false,
+    "prefer-const": false,
     "quotemark": [
       false,
       "single"
@@ -71,5 +80,6 @@
     "use-pipe-transform-interface": true,
     "component-class-suffix": true,
     "directive-class-suffix": true,
+    "variable-name": false
   }
 }

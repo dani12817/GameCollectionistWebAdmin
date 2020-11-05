@@ -45,7 +45,7 @@ export class GameDetailsComponent {
   private getGameOnLibrary() {
     this.userService.gameOnLibrary(this.gameData.game_code).then(response => {
       this.gameData.userGame = response;
-      if (!this.gameData.userGame) { this.gameData.userGame = {type: 'null'} }
+      if (!this.gameData.userGame) { this.gameData.userGame = {type: 'null'}; }
       this.initFrom();
     }).catch(err => console.error(err));
   }

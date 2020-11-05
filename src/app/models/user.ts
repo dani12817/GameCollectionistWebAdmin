@@ -28,7 +28,7 @@ export class UserGame {
     price?: number;
     currency?: string;
     bought_date?: any;
-    type?: string; //'owned' | 'wishlist'
+    type?: string; // 'owned' | 'wishlist'
 }
 
 export class UserFriend {

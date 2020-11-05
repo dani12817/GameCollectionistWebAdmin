@@ -44,12 +44,12 @@ export class MainComponent {
 
   openSearchDialog() {
     if (this.searchType) { this.filterService.filters.type = this.searchType; }
-    let searchDialog = this.dialog.open(SearchDialogComponent, {panelClass: 'mat-dialog-toolbar', autoFocus: false});
-    let sub = searchDialog.beforeClosed().subscribe(() => {
-      sub.unsubscribe(); this.loading.isLoading = true;
+    const searchDialog = this.dialog.open(SearchDialogComponent, {panelClass: 'mat-dialog-toolbar', autoFocus: false});
+    searchDialog.beforeClosed().subscribe(() => {
+      this.loading.isLoading = true;
       this.searchType = this.filterService.filters.type;
 
-      if (this.searchType == 'user') {
+      if (this.searchType === 'user') {
         this.filterUser();
       } else {
         this.filterGame();
@@ -62,7 +62,7 @@ export class MainComponent {
     this.userService.searchUser(this.filterService.filters.nickname).then(response => {
       this.userFiltered = response;
       this.loading.isLoading = false;
-    }).catch(err => console.error(err))
+    }).catch(err => console.error(err));
   }
 
   private filterGame() {
@@ -80,11 +80,11 @@ export class MainComponent {
   private applyFilter(game: Game, filters: SearchForm): boolean {
     let addGame: boolean;
     for (const filter of Object.keys(filters)) {
-      if (filter == 'name' || filter == 'game_code') {
+      if (filter === 'name' || filter === 'game_code') {
         addGame = game[filter].toLowerCase().includes(filters[filter].toLowerCase());
-      } else if (filter == 'platform' || filter == 'region') {
+      } else if (filter === 'platform' || filter === 'region') {
         addGame = (filters[filter].indexOf(game[filter]) > -1);
-      } else if (filter == 'genres' && game.genres) {
+      } else if (filter === 'genres' && game.genres) {
         for (const genre of filters[filter]) {
           addGame = (game.genres.indexOf(genre) > -1);
           if (addGame) { break; }

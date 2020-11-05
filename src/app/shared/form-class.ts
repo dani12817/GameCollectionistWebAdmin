@@ -47,7 +47,7 @@ export class FormClass {
   getValueNotNull() {
     let formValue = {};
     for (const field of Object.keys(this.formGroup.value)) {
-      if (this.get(field).value && this.get(field).value.length) { formValue[field] = this.get(field).value }
+      if (this.get(field).value && this.get(field).value.length) { formValue[field] = this.get(field).value; }
     }
     return formValue;
   }

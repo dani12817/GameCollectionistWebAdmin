@@ -18,9 +18,9 @@ export class UserCardComponent implements OnInit {
   constructor(private authService: AuthService, private userService: UserService) { }
 
   ngOnInit(): void {
-    if (this.authService.userLogged.uid == this.user.uid) {
+    if (this.authService.userLogged.uid === this.user.uid) {
       this.friendType = 'me';
-    } else if (this.authService.userLogged.friends.findIndex(friend => friend.uid == this.user.uid) > -1) {
+    } else if (this.authService.userLogged.friends.findIndex(friend => friend.uid === this.user.uid) > -1) {
       this.friendType = 'friend';
     } else { this.friendType = 'none'; }
   }
